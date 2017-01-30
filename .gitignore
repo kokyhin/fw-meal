@@ -1,0 +1,16 @@
+node_modules
+dist
+bower_components
+.tmp
+.publish/
+.idea
+
+.env
+jsconfig.json
+gulp
+log
+app/build/
+.DS_Store
+/.project
+npm-debug.log
+.settings/
