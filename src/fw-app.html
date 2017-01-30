@@ -10,55 +10,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
-<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
-<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="fw-app">
-
   <template>
-
+    <style include='iron-flex'></style>
     <style>
-
       :host {
-        display: block;
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        min-height: 100vh;
       }
 
-      app-header {
-        background-color: var(--app-primary-color);
-        color: #fff;
+      .mainContent {
+        overflow: auto;
       }
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-
-      .drawer-list {
-        margin: 0 20px;
-      }
-      .drawer-list a {
-        display: block;
-        padding: 0 16px;
-        line-height: 40px;
-        text-decoration: none;
-        color: var(--app-secondary-color);
-      }
-      .drawer-list a.iron-selected {
-        color: black;
-        font-weight: bold;
-      }
-      .drawer-list a.subroute {
-        padding-left: 32px;
-      }
-
 
     </style>
 
@@ -69,43 +42,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout fullbleed>
+    <div class="header">
+      Hello header
+    </div>
 
-      <!-- Drawer content -->
-      <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
-        </iron-selector>
-      </app-drawer>
+    <div class="mainContent flex">
+      <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <fw-view1 name="view1"></fw-view1>
+        <fw-view2 name="view2"></fw-view2>
+        <fw-view3 name="view3"></fw-view3>
+        <fw-view404 name="view404"></fw-view404>
+      </iron-pages>
+    </div>
 
-      <!-- Main content -->
-      <app-header-layout has-scrolling-region>
-
-        <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
-          </app-toolbar>
-        </app-header>
-
-        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-          <fw-view1 name="view1"></fw-view1>
-          <fw-view2 name="view2"></fw-view2>
-          <fw-view3 name="view3"></fw-view3>
-          <fw-view404 name="view404"></fw-view404>
-        </iron-pages>
-
-      </app-header-layout>
-
-    </app-drawer-layout>
+    <div class="footer">
+      Helo footer
+    </div>
 
   </template>
-
   <script>
-
     Polymer({
 
       is: 'fw-app',
@@ -129,7 +84,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('fw-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
@@ -141,5 +95,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
   </script>
-
 </dom-module>
