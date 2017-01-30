@@ -14,6 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="header/header.html">
+<link rel="import" href="footer/footer-app.html">
 
 <dom-module id="fw-app">
   <template>
@@ -42,22 +44,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <div class="header">
-      Hello header
-    </div>
+    <header-app route='{{routeData}}' class="layout horizontal"></header-app>
 
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <fw-view1 name="view1"></fw-view1>
-        <fw-view2 name="view2"></fw-view2>
-        <fw-view3 name="view3"></fw-view3>
+        <fw-login name='login'></fw-login>
         <fw-view404 name="view404"></fw-view404>
       </iron-pages>
     </div>
 
-    <div class="footer">
-      Helo footer
-    </div>
+    <footer-app class="layout horizontal"></footer-app>
 
   </template>
   <script>
