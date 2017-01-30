@@ -35,6 +35,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         overflow: auto;
       }
 
+      ::-webkit-scrollbar{width: 5px; height: 5px;}
+      ::-webkit-scrollbar-track{background: #F7F7F7;}
+      ::-webkit-scrollbar-thumb{background: #325B9E;}
+      ::-ms-scrollbar{width: 5px; height: 5px;}
+      ::-ms-scrollbar-track{background: #F7F7F7;}
+      ::-ms-scrollbar-thumb{background: #325B9E;}
+      ::-o-scrollbar{width: 5px; height: 5px;}
+      ::-o-scrollbar-track{background: #F7F7F7;}
+      ::-o-scrollbar-thumb{background: #325B9E;}
+
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -44,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <header-app route='{{routeData}}' class="layout horizontal"></header-app>
+    <header-app route='{{routeData}}' class="layout horizontal center"></header-app>
 
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
@@ -54,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </iron-pages>
     </div>
 
-    <footer-app class="layout horizontal"></footer-app>
+    <footer-app class="layout horizontal center-center"></footer-app>
 
   </template>
   <script>

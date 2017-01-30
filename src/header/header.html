@@ -1,23 +1,31 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <dom-module id="header-app">
   <template>
     <style>
       :host {
         display: block;
         padding: 0 20px;
+        background-color: #325B9E;
+        height: 49px;
+        color: #fff;
+      }
+
+      .lnk {
+        cursor: pointer;
+        padding: 0 10px;
       }
     </style>
-    <div on-click='_updateLink' data-lnk='view1'>Home</div>
-    <div on-click='_updateLink' data-lnk='login'>Login</div>
+
+    <paper-tabs attr-for-selected='data-page' selected="{{route.page}}">
+      <paper-tab data-page='view1'>Home</paper-tab>
+      <paper-tab data-page='login'>Login</paper-tab>
+    </paper-tabs>
 
   </template>
   <script>
     Polymer({
-      is: 'header-app',
-
-    _updateLink: function(ev) {
-      this.set('route.page', ev.currentTarget.dataset.lnk);
-    }
+      is: 'header-app'
 
     });
   </script>
