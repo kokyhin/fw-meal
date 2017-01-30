@@ -1,13 +1,25 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="fw-login">
   <template>
+    <style include='iron-flex'></style>
     <style>
       :host {
-        display: block;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        min-height: -moz-calc(100vh - 79px);
+        min-height: -webkit-calc(100vh - 79px);
+        min-height: calc(100vh - 79px);
       }
     </style>
-
-    Hello from fw-login
+    <div class="flex layout horizontal center-center">
+      Hello from fw-login
+    </div>
 
   </template>
   <script>
