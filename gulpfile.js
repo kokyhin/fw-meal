@@ -80,3 +80,21 @@ gulp.task('default', gulp.series([
   project.merge(source, dependencies),
   project.serviceWorker
 ]));
+
+
+var $ = require('gulp-load-plugins')();
+
+require('dotenv').load();
+
+gulp.task('dev', function() {
+  return $.nodemon({
+    exec: "node --debug",
+    script: 'bin/www',
+    ignore: ['./bower_components', './build', './node_modules'],
+    env: {
+      'NODE_ENV': 'development'
+    }
+  }).on('restart', function() {
+    console.log('restarted!');
+  });
+});
