@@ -14,8 +14,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="header/header.html">
 <link rel="import" href="footer/footer-app.html">
+<link rel="import" href="notifications-hub.html">
+
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <dom-module id="fw-app">
   <template>
@@ -54,8 +57,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
+    <notifications-hub></notifications-hub>
     <header-app route='{{routeData}}' class="layout horizontal center"></header-app>
-
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <fw-view1 name="view1"></fw-view1>

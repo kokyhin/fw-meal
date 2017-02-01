@@ -1,5 +1,15 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+<link rel="import" href="../bower_components/paper-password-input/match-passwords-validator.html">
+<link rel="import" href="../bower_components/iron-signals/iron-signals.html">
 
 <dom-module id="fw-login">
   <template>
@@ -16,15 +26,75 @@
         min-height: -webkit-calc(100vh - 79px);
         min-height: calc(100vh - 79px);
       }
+      .form-wrapper {
+        min-width: 300px;
+      }
     </style>
+    <iron-ajax id="regUser"
+      method="POST"
+      url="/api/auth/register"
+      handle-as="json"
+      content-type="application/json"
+      on-response="_onRegisterResponse"
+      on-error="_errorResponse"
+    ></iron-ajax>
+
     <div class="flex layout horizontal center-center">
-      Hello from fw-login
+      <div class="form-wrapper">
+
+        <paper-tabs selected="{{activeTab}}">
+          <paper-tab>Sign In</paper-tab>
+          <paper-tab>Sign Up</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{activeTab}}">
+          <div>Page 1</div>
+
+          <div>
+            <form is="iron-form" id="registerForm">
+              <paper-input name="name" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
+              <match-passwords-validator id="match-passwords-validator" password="[[password]]"></match-passwords-validator>
+              <paper-password-input name="password" label="Password" value="{{password}}"></paper-password-input>
+              <paper-password-input label="Confirm" auto-validate validator="match-passwords-validator" error-message="Passwords need to match"></paper-password-input>
+              <gold-email-input name="email" label="E-mail" required error-message="Invalid Email"></gold-email-input>
+              <paper-button on-click='_submitRegisterForm' raised>Submit</paper-button>
+            </form>
+          </div>
+        </iron-pages>
+
+      </div>
     </div>
 
   </template>
   <script>
     Polymer({
-      is: 'fw-login'
+      is: 'fw-login',
+
+      properties: {
+        activeTab: {
+          type: String,
+          value: '0'
+        }
+      },
+
+      _submitRegisterForm: function() {
+        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
+        if(this.$.registerForm.validate()) {
+          var body = this.$.registerForm.serialize();
+          body.password = this.password;
+          this.$.regUser.body = body;
+          this.$.regUser.generateRequest();
+        }
+      },
+
+      _errorResponse: function(ev, res) {
+        console.log('ERROR RESPONSE')
+      },
+
+      _onRegister: function() {
+        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
+      }
+
     });
   </script>
 </dom-module>

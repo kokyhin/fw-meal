@@ -1,0 +1,83 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/iron-signals/iron-signals.html">
+
+<dom-module id="notifications-hub">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .error-toast {
+        --paper-toast-background-color: orangered;
+      }
+
+      .success-toast {
+        --paper-toast-background-color: limegreen;
+      }
+
+      .info-toast {
+        --paper-toast-background-color: blue;
+      }
+
+      .toast-hide-button {
+        color: yellow;
+        text-align: right;
+      }
+
+    </style>
+    <iron-signals id="signal"></iron-signals>
+
+    <paper-toast id="successToast" class="success-toast toast">
+      <span class="toast-hide-button" role="button" tabindex="0" data-toast="success" on-click="_onOkClick">Ok</span>
+    </paper-toast>
+
+    <paper-toast id="errorToast" class="error-toast toast">
+      <span class="toast-hide-button" role="button" tabindex="0" data-toast="error" on-click="_onOkClick">Ok</span>
+    </paper-toast>
+
+    <paper-toast id="infoToast" class="info-toast toast">
+      <span class="toast-hide-button" role="button" tabindex="0" data-toast="info" on-click="_onOkClick">Ok</span>
+    </paper-toast>
+
+  </template>
+  <script>
+
+    Polymer({
+      is: 'notifications-hub',
+
+      properties: {
+        toastTypes: {
+          type: Array,
+          value: ['info', 'success', 'error']
+        }
+      },
+      listeners: {
+        'signal.iron-signal-toast': '_onToastSent'
+      },
+      _onToastSent: function (event, toast) {
+        if(toast !== undefined && toast !== null && toast.message !== undefined && toast.message !== null && toast.message.length) {
+          if (toast.type == undefined || toast.type == null || this.toastTypes.indexOf(toast.type) == -1) {
+            toast.type = 'info';
+          }
+
+          this.$[toast.type + 'Toast'].text = toast.message;
+          this.$[toast.type + 'Toast'].show();
+
+        } else {
+          console.warn('Wrong toast format');
+        }
+      },
+      _onOkClick: function (event) {
+        var type = event.target.dataset.toast;
+        this.$[type+'Toast'].hide();
+      },
+
+      test: function() {
+        console.log('TEST')
+      }
+    });
+
+  </script>
+</dom-module>
