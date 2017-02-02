@@ -32,7 +32,7 @@ var session       = require('express-session');
 var MongoStore    = require('connect-mongo')(session);
 
 app.use(session({
-    secret: 'ms3 raml generator',
+    secret: 'FW meal',
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({

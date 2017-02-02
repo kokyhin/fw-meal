@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="header/header.html">
 <link rel="import" href="footer/footer-app.html">
 <link rel="import" href="notifications-hub.html">
+<link rel="import" href="fw-view404.html">
 
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <dom-module id="fw-app">
@@ -81,6 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+
+        pageList: {
+          type: Array,
+          value: ['view1', 'login']
         }
 
       },
@@ -94,8 +100,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        var resolvedPageUrl = this.resolveUrl('fw-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        if (~this.pageList.indexOf(page)) {
+          var resolvedPageUrl = this.resolveUrl('fw-' + page + '.html');
+          this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        } else {
+          this._showPage404();
+        }
       },
 
       _showPage404: function() {
