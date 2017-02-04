@@ -51,6 +51,17 @@
       on-error="_errorResponse"
     ></iron-ajax>
 
+    <iron-ajax
+       id="loginAjax"
+       url="/api/auth/login"
+       method="POST"
+       content-type="application/json"
+       handle-as="json"
+       on-response="_onLogin"
+       on-error="_errorResponse">
+      </iron-ajax>
+
+
     <div class="flex layout horizontal center-center">
       <div class="form-wrapper">
 
@@ -62,7 +73,7 @@
         <iron-pages selected="{{activeTab}}">
           <div>
             <form is="iron-form" id="loginForm">
-              <paper-input name="name" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
+              <paper-input name="username" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
               <min-length-validator id="min-length-validator" min-length="4"></min-length-validator>
               <paper-password-input auto-validate label="Password" id='loginPassword' validator="min-length-validator" error-message="Enter at least 4 characters"></paper-password-input>
               <paper-button on-click='_submitLoginForm' raised>Submit</paper-button>
@@ -123,10 +134,16 @@
           return true
         }
         if(this.$.loginForm.validate() && checkLoginPassword(this.$.loginPassword.value)) {
-          console.log('Entered')
           var body = this.$.loginForm.serialize();
           body.password = this.$.loginPassword.value;
+          this.$.loginAjax.body = body;
+          this.$.loginAjax.generateRequest();
         }
+      },
+
+      _onLogin: function(event, request) {
+        var user = request.response;
+        console.log(user)
       },
 
       _errorResponse: function(ev, res) {

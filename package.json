@@ -35,6 +35,8 @@
     "gulp-load-plugins": "^1.4.0",
     "gulp-nodemon": "^2.2.1",
     "mongoose": "^4.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "path": "^0.12.7"
   }

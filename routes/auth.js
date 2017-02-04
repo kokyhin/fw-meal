@@ -1,4 +1,4 @@
-// var passport = require('passport');
+var passport = require('passport');
 var User     = require('../models/user');
 var express  = require('express');
 var router   = express.Router();
@@ -32,37 +32,14 @@ router.route('/register').post(function(req,res,next) {
 //   res.redirect('/');
 // });
 
-// var subscriptionExpirationCheck = function(res, user) {
-//   var currTime = new Date().getTime() / 1000;
-//   if (user.subscription && (currTime > user.subscription.end)) {
-//     stripe.customers.retrieve(user.customerId, function(err, customer) {
-//       if (err) {
-//         return res.status(400).send({error: err.message});
-//       }
-//       if (currTime > customer.subscriptions.data[0].current_period_end) {
-//         user.subscription.active = false
-//         return res.send(user);
-//       }
-//     });
-//   } else {
-//     res.send(user);
-//   }
-// }
-
-// router.post('/login', passport.authenticate('local'), function(req, res) {
-//   User.findOne({'_id': req.user._id}).populate({ path: 'projects', match: { _deleted: false}}).populate('enterprise').exec(function(err, user) {
-//     if (err) {
-//       logger.warn("Login failure due to:" + err.message);
-//       return res.status(400).send({result: {error: err.message}});
-//     }
-//     if(!user.activate){
-//       logger.warn("Deactivated Account Attempted Login: " + user.username);
-//       return res.status(401).send({result: {error: 'Unfortunately your account has been deactivated'}});
-//     }
-//     logger.info("Login Successful: " + user.username + " has logged in.");
-//     subscriptionExpirationCheck(res, user)
-//   });
-// });
+router.post('/login', passport.authenticate('local'), function(req, res) {
+  User.findOne({'_id': req.user._id}, function(err, user) {
+    if (err) {
+      return res.status(400).send({result: {error: err.message}});
+    }
+    res.send(user);
+  });
+});
 
 // router.all('/logout', function(req, res) {
 //     req.logout();

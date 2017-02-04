@@ -3,8 +3,8 @@ var dotenv        = require('dotenv').config();
 var path          = require('path');
 var bodyParser    = require('body-parser');
 var mongoose      = require('mongoose');
-// var passport      = require('passport');
-// var LocalStrategy = require('passport-local').Strategy;
+var passport      = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var fs            = require('fs');
 var api           = require('./routes/api');
 
@@ -61,30 +61,29 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// var User = require('./models/users');
+var User = require('./models/user');
 
-// // allows password reset to work
-// passport.use(new LocalStrategy(function(username, password, done) {
-//   console.log('password was requested by user:', username);
-//   User.findOne({ username: username }, function(err, user) {
-//     if (err) return done(err);
-//     if (!user) return done(null, false, { message: 'Incorrect username.' });
-//     user.comparePassword(password, function(err, isMatch) {
-//       if (isMatch) {
-//         return done(null, user);
-//       } else {
-//         return done(null, false, { message: 'Incorrect password.' });
-//       }
-//     });
-//   });
-// }));
+// allows password reset to work
+passport.use(new LocalStrategy(function(username, password, done) {
+  User.findOne({ username: username }, function(err, user) {
+    if (err) return done(err);
+    if (!user) return done(null, false, { message: 'Incorrect username.' });
+    user.comparePassword(password, function(err, isMatch) {
+      if (isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+    });
+  });
+}));
 
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // //AUTHENTIFICATION
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/api', api);
 
 var staticDir = 'app/build/bundled';
