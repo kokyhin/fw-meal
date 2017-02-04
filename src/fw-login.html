@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
 <link rel="import" href="../bower_components/paper-password-input/match-passwords-validator.html">
+<link rel="import" href="../bower_components/paper-password-input/min-length-validator.html">
 <link rel="import" href="../bower_components/iron-signals/iron-signals.html">
 
 <dom-module id="fw-login">
@@ -29,6 +30,17 @@
       .form-wrapper {
         min-width: 300px;
       }
+      paper-tabs {
+        --paper-tabs-container: {
+          background-color: #325B9E;
+          color: #fff;
+        }
+      }
+      paper-tabs a {
+        color: #fff;
+        text-decoration: none;
+      }
+
     </style>
     <iron-ajax id="regUser"
       method="POST"
@@ -48,14 +60,21 @@
         </paper-tabs>
 
         <iron-pages selected="{{activeTab}}">
-          <div>Page 1</div>
+          <div>
+            <form is="iron-form" id="loginForm">
+              <paper-input name="name" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
+              <min-length-validator id="min-length-validator" min-length="4"></min-length-validator>
+              <paper-password-input auto-validate label="Password" id='loginPassword' validator="min-length-validator" error-message="Enter at least 4 characters"></paper-password-input>
+              <paper-button on-click='_submitLoginForm' raised>Submit</paper-button>
+            </form>
+          </div>
 
           <div>
             <form is="iron-form" id="registerForm">
               <paper-input name="name" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
               <match-passwords-validator id="match-passwords-validator" password="[[password]]"></match-passwords-validator>
               <paper-password-input name="password" label="Password" value="{{password}}"></paper-password-input>
-              <paper-password-input label="Confirm" auto-validate validator="match-passwords-validator" error-message="Passwords need to match"></paper-password-input>
+              <paper-password-input label="Confirm" id='RegPass' auto-validate validator="match-passwords-validator" error-message="Passwords need to match"></paper-password-input>
               <gold-email-input name="email" label="E-mail" required error-message="Invalid Email"></gold-email-input>
               <paper-button on-click='_submitRegisterForm' raised>Submit</paper-button>
             </form>
@@ -78,8 +97,15 @@
       },
 
       _submitRegisterForm: function() {
-        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
-        if(this.$.registerForm.validate()) {
+        var that = this;
+        var checkLoginPassword = function(pass) {
+          if (!pass.length) {
+            that.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Password required'}});
+            return false
+          }
+          return true
+        }
+        if(this.$.registerForm.validate() && checkLoginPassword(this.$.RegPass.value)) {
           var body = this.$.registerForm.serialize();
           body.password = this.password;
           this.$.regUser.body = body;
@@ -87,8 +113,24 @@
         }
       },
 
+      _submitLoginForm:function() {
+        var that = this;
+        var checkLoginPassword = function(pass) {
+          if (!pass.length) {
+            that.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Password required'}});
+            return false
+          }
+          return true
+        }
+        if(this.$.loginForm.validate() && checkLoginPassword(this.$.loginPassword.value)) {
+          console.log('Entered')
+          var body = this.$.loginForm.serialize();
+          body.password = this.$.loginPassword.value;
+        }
+      },
+
       _errorResponse: function(ev, res) {
-        console.log('ERROR RESPONSE')
+        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
       },
 
       _onRegister: function() {
