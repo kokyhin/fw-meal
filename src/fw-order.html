@@ -1,0 +1,49 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="fw-order">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <iron-ajax
+       auto
+       url="/api/order/get-week"
+       method="GET"
+       handle-as="json"
+       content-type="application/json"
+       on-response="_onGetWeek"
+       on-error="_errorResponse"
+       ></iron-ajax>
+
+
+    <template is='dom-repeat' items='{{week}}'>
+      День недели {{item.name}} / Дата {{item.day}}
+      <br>
+      <br>
+    </template>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'fw-order',
+
+      _onGetWeek: function(ev, res) {
+        this.set('week', res.response.week);
+      },
+
+      _errorResponse: function(ev, res) {
+        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
+      },
+
+    });
+  </script>
+</dom-module>

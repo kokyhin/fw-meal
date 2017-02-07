@@ -73,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <header-app user='{{user}}' route='{{routeData}}' class="layout horizontal center"></header-app>
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-        <fw-view1 name="view1"></fw-view1>
+        <fw-order name="order"></fw-order>
         <fw-view2 name="view2"></fw-view2>
         <fw-login name='login'></fw-login>
         <fw-view404 name="view404"></fw-view404>
@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         pageList: {
           type: Array,
-          value: ['view1', 'view2', 'login']
+          value: ['order', 'view2', 'login']
         }
 
       },
@@ -113,11 +113,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _onFetchUser:function(ev, data) {
         this.set('user', data);
-        this.set('page', 'view1');
+        this.set('page', 'order');
       },
 
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        this.page = page || 'order';
       },
 
       _pageChanged: function(page) {

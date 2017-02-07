@@ -1,10 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-// var users         = require('./user');
-var auth          = require('./auth');
-// var projects      = require('./project');
-// var governance    = require('./governance');
+var auth = require('./auth');
+var order = require('./order')
 
 setHeader = function (req, res, next) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -13,9 +11,7 @@ setHeader = function (req, res, next) {
     next();
 };
 
-// router.use('/users', setHeader, users);
 router.use('/auth', setHeader,  auth);
-// router.use('/project', setHeader, projects);
-// router.use('/governance', setHeader, governance);
+router.use('/order', setHeader, order);
 
 module.exports = router;
