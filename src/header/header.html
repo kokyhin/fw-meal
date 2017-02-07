@@ -15,17 +15,27 @@
         cursor: pointer;
         padding: 0 10px;
       }
+      .logOut {
+        margin-left: auto;
+      }
     </style>
 
-    <paper-tabs attr-for-selected='data-page' selected="{{route.page}}">
-      <paper-tab data-page='view1'>Home</paper-tab>
-      <paper-tab data-page='login'>Login</paper-tab>
-    </paper-tabs>
+    <template is='dom-if' if='{{user}}'>
+      <paper-tabs attr-for-selected='data-page' selected="{{route.page}}">
+        <paper-tab data-page='view1'>Home</paper-tab>
+        <paper-tab data-page='view2'>Page2</paper-tab>
+      </paper-tabs>
+      <div class="logOut" on-click='_logOut'>logout</div>
+    </template>
 
   </template>
   <script>
     Polymer({
-      is: 'header-app'
+      is: 'header-app',
+
+      _logOut:function() {
+        window.location.replace('/api/auth/logout');
+      }
 
     });
   </script>

@@ -138,20 +138,23 @@
           body.password = this.$.loginPassword.value;
           this.$.loginAjax.body = body;
           this.$.loginAjax.generateRequest();
+          window.overlay.show();
         }
       },
 
       _onLogin: function(event, request) {
-        var user = request.response;
-        console.log(user)
+        this.fire('iron-signal', {name:'user-fetched', data: request.response});
+        window.overlay.hide();
       },
 
       _errorResponse: function(ev, res) {
         this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
+        window.overlay.hide();
       },
 
       _onRegister: function() {
         this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
+        window.overlay.hide();
       }
 
     });

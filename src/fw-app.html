@@ -15,11 +15,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-signals/iron-signals.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="header/header.html">
 <link rel="import" href="footer/footer-app.html">
 <link rel="import" href="notifications-hub.html">
 <link rel="import" href="fw-view404.html">
 
+<script src="../scripts/app.js"></script>
 <script src="../bower_components/underscore/underscore-min.js"></script>
 <dom-module id="fw-app">
   <template>
@@ -50,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ::-o-scrollbar-thumb{background: #325B9E;}
 
     </style>
-
+    <iron-signals id="signal"></iron-signals>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -58,11 +60,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
+    <iron-ajax
+       auto
+       id="ajax"
+       url="/api/auth/user"
+       handle-as="json"
+       on-response="_onUserFetched"
+       on-error="_onError"
+       ></iron-ajax>
+
     <notifications-hub></notifications-hub>
-    <header-app route='{{routeData}}' class="layout horizontal center"></header-app>
+    <header-app user='{{user}}' route='{{routeData}}' class="layout horizontal center"></header-app>
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <fw-view1 name="view1"></fw-view1>
+        <fw-view2 name="view2"></fw-view2>
         <fw-login name='login'></fw-login>
         <fw-view404 name="view404"></fw-view404>
       </iron-pages>
@@ -86,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         pageList: {
           type: Array,
-          value: ['view1', 'login']
+          value: ['view1', 'view2', 'login']
         }
 
       },
@@ -94,6 +106,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_routePageChanged(routeData.page)'
       ],
+
+      listeners: {
+        'signal.iron-signal-user-fetched': '_onFetchUser',
+      },
+
+      _onFetchUser:function(ev, data) {
+        this.set('user', data);
+        this.set('page', 'view1');
+      },
 
       _routePageChanged: function(page) {
         this.page = page || 'view1';
@@ -110,9 +131,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404: function() {
         this.page = 'view404';
+      },
+
+      _onUserFetched: function (ev, res) {
+        var user = res.response;
+        if (user !== null && user !== undefined) {
+          app.set('user', user);
+          this.set('user', user);
+          // this.set('page', 'view1');
+        } else {
+          app.user = null;
+        }
+        window.overlay.hide();
+      },
+
+      _onError: function(ev, res){
+        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
+        window.overlay.hide();
       }
 
     });
-
   </script>
 </dom-module>

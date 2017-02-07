@@ -27,24 +27,30 @@ router.route('/register').post(function(req,res,next) {
   });
 });
 
-// router.get('/login', function(req, res) {
-//   req.logout();
-//   res.redirect('/');
-// });
-
 router.post('/login', passport.authenticate('local'), function(req, res) {
   User.findOne({'_id': req.user._id}, function(err, user) {
     if (err) {
-      return res.status(400).send({result: {error: err.message}});
+      return res.status(400).send({error: err.message});
     }
     res.send(user);
   });
 });
 
-// router.all('/logout', function(req, res) {
-//     req.logout();
-//     res.redirect('/');
-// });
+router.all('/user', function(req, res) {
+  if (req.isAuthenticated() && req.user) {
+    User.findOne({'_id': req.user._id}, function(err, user) {
+      if(err){return res.status(400).send({error: err.message});}
+      res.send(user);
+    });
+  } else {
+    res.status(401).send({error: 'Unauthorized'});
+  }
+});
+
+router.all('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
 
 // router.get('/forgot-password', function(req, res) {
 //   res.render('forgot', {
