@@ -1,13 +1,25 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="fw-order">
   <template>
+    <style include='iron-flex'></style>
     <style>
       :host {
-        display: block;
-        padding: 10px;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        min-height: -moz-calc(100vh - 79px);
+        min-height: -webkit-calc(100vh - 79px);
+        min-height: calc(100vh - 79px);
+      }
+      .wrapper {
+        padding: 20px;
       }
     </style>
 
@@ -21,12 +33,13 @@
        on-error="_errorResponse"
        ></iron-ajax>
 
-
-    <template is='dom-repeat' items='{{week}}'>
-      День недели {{item.name}} / Дата {{item.day}}
-      <br>
-      <br>
-    </template>
+    <div class="wrapper flex layout horizontal center-center">
+      <template is='dom-repeat' items='{{week}}'>
+        День недели {{item.name}} / Дата {{item.day}}
+        <br>
+        <br>
+      </template>
+    </div>
 
   </template>
 

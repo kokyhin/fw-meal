@@ -10,7 +10,7 @@ ensureAuthenticated = function(req, res, next) {
   }
 };
 
-router.get('/get-week', ensureAuthenticated, function(req, res) {
+router.get('/get-week', function(req, res) {
   function getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),
@@ -19,12 +19,38 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
   }
   var day = getMonday(new Date());
   var week = [
-    {name: 'Пн', day: day.getDate()},
-    {name: 'Вт', day: day.getDate() + 1},
-    {name: 'Ср', day: day.getDate() + 2},
-    {name: 'Чт', day: day.getDate() + 3},
-    {name: 'Пт', day: day.getDate() + 4}
+    {
+      name: 'Пн',
+      day: day.getDate(),
+      active: false
+    },
+    {
+      name: 'Вт',
+      day: day.getDate() + 1,
+      active: false
+    },
+    {
+      name: 'Ср',
+      day: day.getDate() + 2,
+      active: false
+    },
+    {
+      name: 'Чт',
+      day: day.getDate() + 3,
+      active: false
+    },
+    {
+      name: 'Пт',
+      day: day.getDate() + 4,
+      active: false
+    }
   ]
+  var curDay = new Date().getDate();
+  week.forEach(function (item){
+    if (item.day == curDay) {
+      item.active = true
+    }
+  })
   res.send({week});
 });
 
