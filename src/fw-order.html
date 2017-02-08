@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="day-week.html">
 
 <dom-module id="fw-order">
   <template>
@@ -21,6 +22,12 @@
       .wrapper {
         padding: 20px;
       }
+      paper-card {
+        margin: 5px;
+      }
+      .card-content {
+        padding-top: 0 !important;
+      }
     </style>
 
     <iron-ajax
@@ -35,9 +42,7 @@
 
     <div class="wrapper flex layout horizontal center-center">
       <template is='dom-repeat' items='{{week}}'>
-        День недели {{item.name}} / Дата {{item.day}}
-        <br>
-        <br>
+        <day-week meal='{{item}}'></day-week>
       </template>
     </div>
 

@@ -1,0 +1,62 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="day-week">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+
+    <paper-card heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
+      <form is="iron-form">
+        <div class="card-content">
+          <paper-input type='number' value='{{full}}' min='0' label="Полное"></paper-input>
+          <paper-input type='number' value='{{first}}' min='0' label="Первое"></paper-input>
+          <paper-input type='number' value='{{second}}' min='0' label="Второе"></paper-input>
+          <div>{{_calc(full,first,second)}}</div>
+        </div>
+        <div class="card-actions">
+          <paper-icon-button on-click="_saveMeal" icon="save"></paper-icon-button>
+          <paper-icon-button icon="subject"></paper-icon-button>
+        </div>
+      </form>
+    </paper-card>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'day-week',
+      properties: {
+        meal: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      _saveMeal: function(ev) {
+        var form = ev.currentTarget.parentElement.parentElement;
+        console.log(form.validate());
+      },
+
+      _calc: function(full, first, second) {
+        var price = this.meal.price;
+        var amount = full * price.full + first * price.first + second * price.second
+        return amount + ' леев'
+      },
+
+    });
+  </script>
+</dom-module>

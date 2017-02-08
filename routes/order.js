@@ -22,27 +22,52 @@ router.get('/get-week', function(req, res) {
     {
       name: 'Пн',
       day: day.getDate(),
-      active: false
+      active: false,
+      price: {
+        full: process.env.PRICE_FULL,
+        first: process.env.PRICE_FIRST,
+        second: process.env.PRICE_SECOND
+      }
     },
     {
       name: 'Вт',
       day: day.getDate() + 1,
-      active: false
+      active: false,
+      price: {
+        full: process.env.PRICE_FULL,
+        first: process.env.PRICE_FIRST,
+        second: process.env.PRICE_SECOND
+      }
     },
     {
       name: 'Ср',
       day: day.getDate() + 2,
-      active: false
+      active: false,
+      price: {
+        full: process.env.PRICE_FULL,
+        first: process.env.PRICE_FIRST,
+        second: process.env.PRICE_SECOND
+      }
     },
     {
       name: 'Чт',
       day: day.getDate() + 3,
-      active: false
+      active: false,
+      price: {
+        full: process.env.PRICE_FULL,
+        first: process.env.PRICE_FIRST,
+        second: process.env.PRICE_SECOND
+      }
     },
     {
       name: 'Пт',
       day: day.getDate() + 4,
-      active: false
+      active: false,
+      price: {
+        full: process.env.PRICE_FULL,
+        first: process.env.PRICE_FIRST,
+        second: process.env.PRICE_SECOND
+      }
     }
   ]
   var curDay = new Date().getDate();
