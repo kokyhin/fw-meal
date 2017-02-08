@@ -14,10 +14,12 @@
         display: block;
         padding: 10px;
       }
+      .active {
+        background-color: #91e6b8;
+      }
     </style>
 
-
-    <paper-card heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
+    <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
           <paper-input type='number' value='{{full}}' min='0' label="Полное"></paper-input>
@@ -43,6 +45,11 @@
         meal: {
           type: Object,
           notify: true
+        },
+        amount: {
+          type: Number,
+          value: 0,
+          notify: true
         }
       },
 
@@ -51,9 +58,15 @@
         console.log(form.validate());
       },
 
+      _isActive: function() {
+        if (this.meal == undefined) {return ''}
+        return this.meal.active ? 'active' : '';
+      },
+
       _calc: function(full, first, second) {
         var price = this.meal.price;
-        var amount = full * price.full + first * price.first + second * price.second
+        var amount = full * price.full + first * price.first + second * price.second;
+        this.set('amount', amount);
         return amount + ' леев'
       },
 
