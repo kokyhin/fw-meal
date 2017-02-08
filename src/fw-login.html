@@ -58,7 +58,7 @@
        content-type="application/json"
        handle-as="json"
        on-response="_onLogin"
-       on-error="_errorResponse">
+       on-error="_errorLogin">
       </iron-ajax>
 
 
@@ -150,6 +150,14 @@
       _errorResponse: function(ev, res) {
         this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
         window.overlay.hide();
+      },
+
+      _errorLogin: function(event, error) {
+        app.set('user', null);
+        if (error.request.status == '401') {
+          this.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Bad username and password combination'}});
+        }
+        overlay.hide();
       },
 
       _onRegister: function() {
