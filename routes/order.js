@@ -23,77 +23,92 @@ router.post('/create', ensureAuthenticated, function(req, res) {
 });
 
 router.get('/get-week', ensureAuthenticated, function(req, res) {
-  function getMonday(d) {
-    d = new Date(d);
-    var day = d.getDay(),
-        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-    return new Date(d.setDate(diff));
-  }
-  var day = getMonday(new Date());
-  var week = [
-    {
-      name: 'Пн',
-      day: day.getDate(),
-      active: false,
-      dayid: day.getDate() + '' + day.getMonth() + '' + day.getFullYear(),
-      price: {
-        full: process.env.PRICE_FULL,
-        first: process.env.PRICE_FIRST,
-        second: process.env.PRICE_SECOND
-      }
-    },
-    {
-      name: 'Вт',
-      day: day.getDate() + 1,
-      active: false,
-      dayid: day.getDate() + 1 + '' + day.getMonth() + '' + day.getFullYear(),
-      price: {
-        full: process.env.PRICE_FULL,
-        first: process.env.PRICE_FIRST,
-        second: process.env.PRICE_SECOND
-      }
-    },
-    {
-      name: 'Ср',
-      day: day.getDate() + 2,
-      active: false,
-      dayid: day.getDate() + 2 + '' + day.getMonth() + '' + day.getFullYear(),
-      price: {
-        full: process.env.PRICE_FULL,
-        first: process.env.PRICE_FIRST,
-        second: process.env.PRICE_SECOND
-      }
-    },
-    {
-      name: 'Чт',
-      day: day.getDate() + 3,
-      active: false,
-      dayid: day.getDate() + 3 + '' + day.getMonth() + '' + day.getFullYear(),
-      price: {
-        full: process.env.PRICE_FULL,
-        first: process.env.PRICE_FIRST,
-        second: process.env.PRICE_SECOND
-      }
-    },
-    {
-      name: 'Пт',
-      day: day.getDate() + 4,
-      active: false,
-      dayid: day.getDate() + 4 + '' + day.getMonth() + '' + day.getFullYear(),
-      price: {
-        full: process.env.PRICE_FULL,
-        first: process.env.PRICE_FIRST,
-        second: process.env.PRICE_SECOND
-      }
+  mongoose.model('users').findOne({'_id': req.user._id}).populate('orders').exec((err, user) =>{
+    if(err) {return res.status(400).send({error: err.message});}
+    function getMonday(d) {
+      d = new Date(d);
+      var day = d.getDay(),
+          diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+      return new Date(d.setDate(diff));
     }
-  ]
-  var curDay = new Date().getDate();
-  week.forEach(function (item){
-    if (item.day == curDay) {
-      item.active = true
-    }
-  })
-  res.send({week});
+    var day = getMonday(new Date());
+    var week = [
+      {
+        name: 'Пн',
+        day: day.getDate(),
+        active: false,
+        dayid: day.getDate() + '' + day.getMonth() + '' + day.getFullYear(),
+        price: {
+          full: process.env.PRICE_FULL,
+          first: process.env.PRICE_FIRST,
+          second: process.env.PRICE_SECOND
+        }
+      },
+      {
+        name: 'Вт',
+        day: day.getDate() + 1,
+        active: false,
+        dayid: day.getDate() + 1 + '' + day.getMonth() + '' + day.getFullYear(),
+        price: {
+          full: process.env.PRICE_FULL,
+          first: process.env.PRICE_FIRST,
+          second: process.env.PRICE_SECOND
+        }
+      },
+      {
+        name: 'Ср',
+        day: day.getDate() + 2,
+        active: false,
+        dayid: day.getDate() + 2 + '' + day.getMonth() + '' + day.getFullYear(),
+        price: {
+          full: process.env.PRICE_FULL,
+          first: process.env.PRICE_FIRST,
+          second: process.env.PRICE_SECOND
+        }
+      },
+      {
+        name: 'Чт',
+        day: day.getDate() + 3,
+        active: false,
+        dayid: day.getDate() + 3 + '' + day.getMonth() + '' + day.getFullYear(),
+        price: {
+          full: process.env.PRICE_FULL,
+          first: process.env.PRICE_FIRST,
+          second: process.env.PRICE_SECOND
+        }
+      },
+      {
+        name: 'Пт',
+        day: day.getDate() + 4,
+        active: false,
+        dayid: day.getDate() + 4 + '' + day.getMonth() + '' + day.getFullYear(),
+        price: {
+          full: process.env.PRICE_FULL,
+          first: process.env.PRICE_FIRST,
+          second: process.env.PRICE_SECOND
+        }
+      }
+    ]
+    var curDay = new Date().getDate();
+    week.forEach(function (item){
+      if (item.day == curDay) {
+        item.active = true
+      }
+    });
+
+    week.forEach(function(day) {
+      var id = Number(day.dayid);
+      for(var i=0; i<user.orders.length; i++) {
+        if(user.orders[i].dayid == id) {
+          day.second = user.orders[i].second;
+          day.first = user.orders[i].first;
+          day.full = user.orders[i].full;
+          day.disabled = true
+        }
+      }
+    }, this);
+    res.send(week);
+  });
 });
 
 module.exports = router;

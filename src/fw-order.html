@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="day-week.html">
 
 <dom-module id="fw-order">
@@ -39,6 +40,8 @@
       on-response="_onGetWeek"
       ></iron-ajax>
 
+    <iron-signals id='signal'></iron-signals>
+
     <div class="wrapper flex layout horizontal center-center">
       <template is='dom-repeat' items='{{week}}'>
         <day-week meal='{{item}}'></day-week>
@@ -63,6 +66,11 @@
         }
       },
 
+      listeners: {
+        'signal.iron-signal-update-week': '_checkUser',
+      },
+
+
       _checkUser: function(user) {
         if (user) {
           this.$.getWeek.generateRequest();
@@ -70,7 +78,7 @@
       },
 
       _onGetWeek: function(ev, res) {
-        this.set('week', res.response.week);
+        this.set('week', res.response);
       }
 
     });

@@ -33,13 +33,13 @@
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
-          <paper-input type='number' name='full' value='{{full}}' min='0' label="Полное"></paper-input>
-          <paper-input type='number' name='first' value='{{first}}' min='0' label="Первое"></paper-input>
-          <paper-input type='number' name='second' value='{{second}}' min='0' label="Второе"></paper-input>
-          <div>{{_calc(full,first,second)}}</div>
+          <paper-input disabled$="{{meal.disabled}}" type='number' name='full' value='{{meal.full}}' min='0' label="Полное"></paper-input>
+          <paper-input disabled$="{{meal.disabled}}" type='number' name='first' value='{{meal.first}}' min='0' label="Первое"></paper-input>
+          <paper-input disabled$="{{meal.disabled}}" type='number' name='second' value='{{meal.second}}' min='0' label="Второе"></paper-input>
+          <div>{{_calc(meal.full,meal.first,meal.second)}}</div>
         </div>
         <div class="card-actions">
-          <paper-icon-button on-click="_makeOrder" icon="save"></paper-icon-button>
+          <paper-icon-button disabled$="{{meal.disabled}}" on-click="_makeOrder" icon="save"></paper-icon-button>
           <paper-icon-button icon="subject"></paper-icon-button>
         </div>
       </form>
@@ -68,7 +68,7 @@
         var order = ev.currentTarget.parentElement.parentElement.serialize();
         var isValid = false
         for(var key in order) {
-          if (order[key].length) {
+          if (order[key]) {
             isValid = true
           } else {
             delete order[key]
@@ -97,6 +97,7 @@
 
       _onOrderResponse: function() {
         this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'Order saved successfully'}});
+        this.fire('iron-signal', {name: 'update-week'});
       },
 
       _errorResponse:function(ev, data) {
