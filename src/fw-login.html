@@ -6,7 +6,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<!--<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">-->
 <link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
 <link rel="import" href="../bower_components/paper-password-input/match-passwords-validator.html">
 <link rel="import" href="../bower_components/paper-password-input/min-length-validator.html">
@@ -48,7 +48,7 @@
       url="/api/auth/register"
       handle-as="json"
       content-type="application/json"
-      on-response="_onRegisterResponse"
+      on-response="_onRegister"
       on-error="_errorResponse"
     ></iron-ajax>
 
@@ -62,8 +62,8 @@
        on-error="_errorLogin">
       </iron-ajax>
 
-    <iron-a11y-keys id="a11y" target="[[this.$.loginForm]]" keys="enter" on-keys-pressed="_submitLoginForm"></iron-a11y-keys>
-    <iron-a11y-keys id="a11y" target="[[this.$.registerForm]]" keys="enter" on-keys-pressed="_submitRegisterForm"></iron-a11y-keys>
+    <iron-a11y-keys id="a11y" keys="enter" on-keys-pressed="_submitLoginForm"></iron-a11y-keys>
+    <iron-a11y-keys id="a11y" keys="enter" on-keys-pressed="_submitRegisterForm"></iron-a11y-keys>
 
     <div class="flex layout horizontal center-center">
       <div class="form-wrapper">
@@ -89,7 +89,7 @@
               <match-passwords-validator id="match-passwords-validator" password="[[password]]"></match-passwords-validator>
               <paper-password-input name="password" label="Password" value="{{password}}"></paper-password-input>
               <paper-password-input label="Confirm" id='RegPass' auto-validate validator="match-passwords-validator" error-message="Passwords need to match"></paper-password-input>
-              <gold-email-input name="email" label="E-mail" required error-message="Invalid Email"></gold-email-input>
+              <!--<gold-email-input name="email" label="E-mail" required error-message="Invalid Email"></gold-email-input>-->
               <paper-button on-click='_submitRegisterForm' raised>Submit</paper-button>
             </form>
           </div>
@@ -169,6 +169,8 @@
 
       _onRegister: function() {
         this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
+        this.$.registerForm.reset();
+        this.set('activeTab', 0)
         window.overlay.hide();
       }
 

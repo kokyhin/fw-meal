@@ -5,8 +5,8 @@ var bcrypt               = require('bcrypt-nodejs');
 
 var UsersSchema = new Schema({
   id:         Schema.ObjectId,
-  username: String,
-  email: { type: String, required: true, unique: true, default: 'Default'},
+  username: { type: String, required: true, unique: true, default: 'Default'},
+  // email: { type: String, required: true, unique: true, default: 'Default'},
   password:   {type: String, default: 'Default'},
   orders:   [{
     type: Schema.ObjectId,
