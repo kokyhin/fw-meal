@@ -10,6 +10,18 @@ ensureAuthenticated = function(req, res, next) {
   }
 };
 
+router.post('/create', ensureAuthenticated, function(req, res) {
+  mongoose.model('orders').create(req.body, function(err, order) {
+    if(err) {return res.status(400).send({error: err.message});}
+    mongoose.model('users').findOne({'_id': req.user._id}, function(err, user){
+      if(err) {return res.status(400).send({error: err.message});}
+      user.orders.push(order);
+      user.save();
+      res.send('Order saved')
+    })
+  })
+});
+
 router.get('/get-week', function(req, res) {
   function getMonday(d) {
     d = new Date(d);

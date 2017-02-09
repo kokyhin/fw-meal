@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="day-week">
   <template>
@@ -19,16 +20,26 @@
       }
     </style>
 
+    <iron-ajax
+       id="orderAjax"
+       url="/api/order/create"
+       method="POST"
+       content-type="application/json"
+       handle-as="json"
+       on-response="_onOrderResponse"
+       on-error="_errorResponse">
+      </iron-ajax>
+
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
-          <paper-input type='number' value='{{full}}' min='0' label="Полное"></paper-input>
-          <paper-input type='number' value='{{first}}' min='0' label="Первое"></paper-input>
-          <paper-input type='number' value='{{second}}' min='0' label="Второе"></paper-input>
+          <paper-input type='number' name='full' value='{{full}}' min='0' label="Полное"></paper-input>
+          <paper-input type='number' name='first' value='{{first}}' min='0' label="Первое"></paper-input>
+          <paper-input type='number' name='second' value='{{second}}' min='0' label="Второе"></paper-input>
           <div>{{_calc(full,first,second)}}</div>
         </div>
         <div class="card-actions">
-          <paper-icon-button on-click="_saveMeal" icon="save"></paper-icon-button>
+          <paper-icon-button on-click="_makeOrder" icon="save"></paper-icon-button>
           <paper-icon-button icon="subject"></paper-icon-button>
         </div>
       </form>
@@ -53,9 +64,23 @@
         }
       },
 
-      _saveMeal: function(ev) {
-        var form = ev.currentTarget.parentElement.parentElement;
-        console.log(form.validate());
+      _makeOrder: function(ev) {
+        var order = ev.currentTarget.parentElement.parentElement.serialize();
+        var isValid = false
+        for(var key in order) {
+          if (order[key].length) {
+            isValid = true
+          } else {
+            delete order[key]
+          }
+        }
+        if(isValid) {
+          order.dayid = this.meal.dayid;
+          this.$.orderAjax.body = order;
+          this.$.orderAjax.generateRequest();
+        } else {
+          this.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Fill order'}});
+        }
       },
 
       _isActive: function() {
@@ -69,6 +94,14 @@
         this.set('amount', amount);
         return amount + ' леев'
       },
+
+      _onOrderResponse: function() {
+        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'Order saved successfully'}});
+      },
+
+      _errorResponse:function(ev, data) {
+        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: data.request.response.error}});
+      }
 
     });
   </script>

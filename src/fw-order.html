@@ -37,7 +37,6 @@
        handle-as="json"
        content-type="application/json"
        on-response="_onGetWeek"
-       on-error="_errorResponse"
        ></iron-ajax>
 
     <div class="wrapper flex layout horizontal center-center">
@@ -47,20 +46,14 @@
     </div>
 
   </template>
-
   <script>
 
     Polymer({
-
       is: 'fw-order',
 
       _onGetWeek: function(ev, res) {
         this.set('week', res.response.week);
-      },
-
-      _errorResponse: function(ev, res) {
-        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
-      },
+      }
 
     });
   </script>
