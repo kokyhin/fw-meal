@@ -8,6 +8,10 @@ var UsersSchema = new Schema({
   username: String,
   email: { type: String, required: true, unique: true, default: 'Default'},
   password:   {type: String, default: 'Default'},
+  orders:   [{
+    type: Schema.ObjectId,
+    ref: 'orders'
+  }],
 },
 {
   timestamps: true
