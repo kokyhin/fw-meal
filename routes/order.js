@@ -22,7 +22,7 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   })
 });
 
-router.get('/get-week', function(req, res) {
+router.get('/get-week', ensureAuthenticated, function(req, res) {
   function getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),

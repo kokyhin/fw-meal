@@ -31,13 +31,13 @@
     </style>
 
     <iron-ajax
-       auto
-       url="/api/order/get-week"
-       method="GET"
-       handle-as="json"
-       content-type="application/json"
-       on-response="_onGetWeek"
-       ></iron-ajax>
+      id='getWeek'
+      url="/api/order/get-week"
+      method="GET"
+      handle-as="json"
+      content-type="application/json"
+      on-response="_onGetWeek"
+      ></iron-ajax>
 
     <div class="wrapper flex layout horizontal center-center">
       <template is='dom-repeat' items='{{week}}'>
@@ -50,6 +50,24 @@
 
     Polymer({
       is: 'fw-order',
+
+      properties: {
+        week: {
+          type: Array,
+          notify: true
+        },
+        user: {
+          type: Object,
+          notify: true,
+          observer: '_checkUser'
+        }
+      },
+
+      _checkUser: function(user) {
+        if (user) {
+          this.$.getWeek.generateRequest();
+        }
+      },
 
       _onGetWeek: function(ev, res) {
         this.set('week', res.response.week);
