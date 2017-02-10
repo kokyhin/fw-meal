@@ -27,7 +27,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
     if(err) {return res.status(400).send({error: err.message});}
     function getMonday(d) {
       d = new Date(d);
-      if(d.getDay() == 5 && d.getHours() > 14) {
+      if(d.getDay() == 5 && d.getHours() > 13) {
         d.setDate(d.getDate() + 3);
         var day = d.getDay(),
             diff = d.getDate() - day + 1;
