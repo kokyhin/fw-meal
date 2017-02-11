@@ -23,8 +23,10 @@
 
     <template is='dom-if' if='{{user}}'>
       <paper-tabs attr-for-selected='data-page' selected="{{route.page}}">
-        <paper-tab data-page='order'>Home</paper-tab>
-        <paper-tab data-page='view2'>Page2</paper-tab>
+        <template is='dom-if' if='{{user.admin}}'>
+          <paper-tab data-page='order'>Order</paper-tab>
+          <paper-tab data-page='orders'>Order list</paper-tab>
+        </template>
       </paper-tabs>
       <div class="logOut" on-click='_logOut'>logout</div>
     </template>

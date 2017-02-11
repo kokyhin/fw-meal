@@ -74,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="mainContent flex">
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
         <fw-order user='{{user}}' name="order"></fw-order>
-        <fw-view2 name="view2"></fw-view2>
+        <fw-orders name="orders"></fw-orders>
         <fw-login name='login'></fw-login>
         <fw-view404 name="view404"></fw-view404>
       </iron-pages>
@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         pageList: {
           type: Array,
-          value: ['order', 'view2', 'login']
+          value: ['order', 'orders', 'login']
         }
 
       },

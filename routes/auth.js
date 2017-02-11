@@ -10,13 +10,12 @@ var mongoose = require('mongoose');
 // var crypto = require('crypto');
 
 router.route('/register').post(function(req,res,next) {
-  User.findOne({email: req.body.email}, function(err, user) {
+  User.findOne({username: req.body.name}, function(err, user) {
     if (user) {
       return res.sendStatus(410);
     }
     User.register(new User({
       username: req.body.name,
-      // email: req.body.email,
       password: req.body.password,
     }), req.body.password, function (err) {
       if (err) {
