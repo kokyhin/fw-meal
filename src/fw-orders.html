@@ -1,5 +1,6 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-data-table/iron-data-table.html">
 
 <dom-module id="fw-orders">
   <template>
@@ -10,18 +11,35 @@
       }
     </style>
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    <template is="dom-bind">
+      <iron-ajax id="getOrders"
+        auto
+        method="GET"
+        url="/api/order/get-orders"
+        handle-as="json"
+        content-type="application/json"
+        last-response="{{data}}"
+      ></iron-ajax>
+
+      <iron-data-table items="[[data]]">
+        <data-table-column name="First Name" filter-by="name.first">
+          <template>[[item.name.first]]</template>
+        </data-table-column>
+        <data-table-column name="Last Name">
+          <template>[[item.name.last]]</template>
+        </data-table-column>
+      </iron-data-table>
+    </template>
 
   </template>
   <script>
     Polymer({
 
-      is: 'fw-orders'
+      is: 'fw-orders',
+
+      _errorResponse: function(ev, res) {
+        this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
+      },
 
     });
 
