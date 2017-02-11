@@ -32,10 +32,16 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         var day = d.getDay(),
             diff = d.getDate() - day + 1;
         return new Date(d.setDate(diff));
+      } else if (d.getDay() > 5) {
+        d.setDate(d.getDate() + 3);
+        var day = d.getDay(),
+            diff = d.getDate() - day + 1;
+        return new Date(d.setDate(diff));
+      } else {
+        var day = d.getDay(),
+            diff = d.getDate() - day + 1; // adjust when day is sunday
+        return new Date(d.setDate(diff));
       }
-      var day = d.getDay(),
-          diff = d.getDate() - day + 1; // adjust when day is sunday
-      return new Date(d.setDate(diff));
     }
     var day = getMonday(new Date());
     var week = [
