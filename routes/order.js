@@ -50,6 +50,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         day: day.getDate(),
         active: false,
         dayid: day.getDate() + '' + day.getMonth() + '' + day.getFullYear(),
+        first: 0,
+        second: 0,
+        full: 0,
         price: {
           full: process.env.PRICE_FULL,
           first: process.env.PRICE_FIRST,
@@ -61,6 +64,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         day: day.getDate() + 1,
         active: false,
         dayid: day.getDate() + 1 + '' + day.getMonth() + '' + day.getFullYear(),
+        first: 0,
+        second: 0,
+        full: 0,
         price: {
           full: process.env.PRICE_FULL,
           first: process.env.PRICE_FIRST,
@@ -72,6 +78,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         day: day.getDate() + 2,
         active: false,
         dayid: day.getDate() + 2 + '' + day.getMonth() + '' + day.getFullYear(),
+        first: 0,
+        second: 0,
+        full: 0,
         price: {
           full: process.env.PRICE_FULL,
           first: process.env.PRICE_FIRST,
@@ -83,6 +92,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         day: day.getDate() + 3,
         active: false,
         dayid: day.getDate() + 3 + '' + day.getMonth() + '' + day.getFullYear(),
+        first: 0,
+        second: 0,
+        full: 0,
         price: {
           full: process.env.PRICE_FULL,
           first: process.env.PRICE_FIRST,
@@ -94,6 +106,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         day: day.getDate() + 4,
         active: false,
         dayid: day.getDate() + 4 + '' + day.getMonth() + '' + day.getFullYear(),
+        first: 0,
+        second: 0,
+        full: 0,
         price: {
           full: process.env.PRICE_FULL,
           first: process.env.PRICE_FIRST,

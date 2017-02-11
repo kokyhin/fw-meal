@@ -33,10 +33,10 @@
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='full' value='{{meal.full}}' min='0' label="Полное"></paper-input>
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='first' value='{{meal.first}}' min='0' label="Первое"></paper-input>
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='second' value='{{meal.second}}' min='0' label="Второе"></paper-input>
-          <div>{{_calc(meal.full,meal.first,meal.second)}}</div>
+          <paper-input disabled$="{{meal.disabled}}" on-change='_calc' type='number' name='full' value='{{meal.full}}' min='0' label="Полное"></paper-input>
+          <paper-input disabled$="{{meal.disabled}}" on-change='_calc' type='number' name='first' value='{{meal.first}}' min='0' label="Первое"></paper-input>
+          <paper-input disabled$="{{meal.disabled}}" on-change='_calc' type='number' name='second' value='{{meal.second}}' min='0' label="Второе"></paper-input>
+          <div>{{amount}} MDL</div>
         </div>
         <div class="card-actions">
           <paper-icon-button disabled$="{{meal.disabled}}" on-click="_makeOrder" icon="save"></paper-icon-button>
@@ -88,11 +88,10 @@
         return this.meal.active ? 'active' : '';
       },
 
-      _calc: function(full, first, second) {
+      _calc: function() {
         var price = this.meal.price;
-        var amount = full * price.full + first * price.first + second * price.second;
+        var amount = Number(this.meal.full) * Number(price.full) + Number(this.meal.first) * Number(price.first) + Number(this.meal.second) * Number(price.second);
         this.set('amount', amount);
-        return amount + ' леев'
       },
 
       _onOrderResponse: function() {
