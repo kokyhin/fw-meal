@@ -6,7 +6,11 @@ var order = new Schema({
     dayid:  Number,
     full:   {type: Number, default: 0},
     first:  {type: Number, default: 0},
-    second: {type: Number, default: 0}
+    second: {type: Number, default: 0},
+    user:   {
+        type: Schema.ObjectId,
+        ref: 'users'
+    }
 });
 
 module.exports = mongoose.model('orders', order);
