@@ -18,17 +18,23 @@
         url="/api/order/get-orders"
         handle-as="json"
         content-type="application/json"
+        on-error="_errorResponse"
         last-response="{{data}}"
       ></iron-ajax>
 
-      <iron-data-table items="[[data]]">
-        <data-table-column name="First Name" filter-by="name.first">
-          <template>[[item.name.first]]</template>
-        </data-table-column>
-        <data-table-column name="Last Name">
-          <template>[[item.name.last]]</template>
-        </data-table-column>
-      </iron-data-table>
+      <template is='dom-repeat' items='{{data}}'>
+        {{item._id}}
+        <iron-data-table items="[[item.orders]]">
+          <data-table-column name="First Name" filter-by="username">
+            <template>[[item.username]]</template>
+          </data-table-column>
+          <data-table-column name="Last Name">
+            <template>[[item.name.last]]</template>
+          </data-table-column>
+        </iron-data-table>
+
+      </template>
+
     </template>
 
   </template>
@@ -39,7 +45,7 @@
 
       _errorResponse: function(ev, res) {
         this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
-      },
+      }
 
     });
 
