@@ -1,41 +1,71 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-data-table/iron-data-table.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="fw-orders">
   <template>
+    <style include='iron-flex'></style>
     <style>
       :host {
         display: block;
         padding: 10px;
       }
+      paper-tabs {
+        --paper-tabs-container: {
+          background-color: #325B9E;
+          color: #fff;
+          display: flex;
+        }
+      }
+      paper-tabs a {
+        color: #fff;
+        text-decoration: none;
+      }
     </style>
 
-    <template is="dom-bind">
-      <iron-ajax id="getOrders"
-        auto
-        method="GET"
-        url="/api/order/get-orders"
-        handle-as="json"
-        content-type="application/json"
-        on-error="_errorResponse"
-        last-response="{{data}}"
-      ></iron-ajax>
+    <iron-ajax id="getOrders"
+      auto
+      method="GET"
+      url="/api/order/get-orders"
+      handle-as="json"
+      content-type="application/json"
+      on-error="_errorResponse"
+      on-response='_onGetOrders'
+      last-response="{{data}}"
+    ></iron-ajax>
 
+    <iron-ajax id="getDayOrders"
+      method="POST"
+      url="/api/order/get-orders-day"
+      handle-as="json"
+      content-type="application/json"
+      on-error="_errorResponse"
+      on-response="_onGetDayOrders"
+    ></iron-ajax>
+    <paper-tabs selected="0">
       <template is='dom-repeat' items='{{data}}'>
-        {{item._id}}
-        <iron-data-table items="[[item.orders]]">
-          <data-table-column name="First Name" filter-by="username">
-            <template>[[item.username]]</template>
-          </data-table-column>
-          <data-table-column name="Last Name">
-            <template>[[item.name.last]]</template>
-          </data-table-column>
-        </iron-data-table>
-
+        <paper-tab on-click='_getDayTable'>{{item.name}}-{{item.day}}</paper-tab>
       </template>
+    </paper-tabs>
 
-    </template>
+    <iron-data-table items="[[dayTable]]">
+      <data-table-column name="User" filter-by="user.username">
+        <template>[[item.user.username]]</template>
+      </data-table-column>
+      <data-table-column name="Полное">
+        <template>[[item.full]]</template>
+      </data-table-column>
+      <data-table-column name="Первое">
+        <template>[[item.first]]</template>
+      </data-table-column>
+      <data-table-column name="Воторе">
+        <template>[[item.second]]</template>
+      </data-table-column>
+    </iron-data-table>
 
   </template>
   <script>
@@ -43,11 +73,32 @@
 
       is: 'fw-orders',
 
+      properties: {
+        dayTable : Array
+      },
+
+      _getDayTable: function(ev) {
+        this.$.getDayOrders.body = {day: ev.model.item.dayid};
+        this.$.getDayOrders.generateRequest();
+        window.overlay.show();
+      },
+
+      _onGetDayOrders: function(ev, data) {
+        this.set('dayTable', data.response);
+        window.overlay.hide()
+      },
+
+      _onGetOrders: function(ev, data) {
+        this.$.getDayOrders.body = {day: data.response[0].dayid};
+        this.$.getDayOrders.generateRequest();
+        window.overlay.show();
+      },
+
       _errorResponse: function(ev, res) {
         this.fire('iron-signal', {name:'toast', data: {type: 'error', message: res.request.response.error}});
+        window.overlay.hide()
       }
 
     });
-
   </script>
 </dom-module>

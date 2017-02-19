@@ -43,7 +43,7 @@
     <iron-signals id='signal'></iron-signals>
 
     <div class="wrapper flex layout horizontal center-center">
-      <template is='dom-repeat' items='{{week}}'>
+      <template is='dom-repeat' items='{{week.days}}'>
         <day-week meal='{{item}}'></day-week>
       </template>
     </div>
