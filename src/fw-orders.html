@@ -18,12 +18,7 @@
         --paper-tabs-container: {
           background-color: #325B9E;
           color: #fff;
-          display: flex;
         }
-      }
-      paper-tabs a {
-        color: #fff;
-        text-decoration: none;
       }
     </style>
 
@@ -46,7 +41,7 @@
       on-error="_errorResponse"
       on-response="_onGetDayOrders"
     ></iron-ajax>
-    <paper-tabs selected="0">
+    <paper-tabs selected="0" autoselect autoselect-delay="1000">
       <template is='dom-repeat' items='{{data}}'>
         <paper-tab on-click='_getDayTable'>{{item.name}}-{{item.day}}</paper-tab>
       </template>
