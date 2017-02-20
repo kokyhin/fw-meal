@@ -20,6 +20,9 @@
           color: #fff;
         }
       }
+      iron-data-table data-table-row:last-child {
+        background-color: #c4da1b !important;
+      }
     </style>
 
     <iron-ajax id="getOrders"
@@ -47,7 +50,7 @@
       </template>
     </paper-tabs>
 
-    <iron-data-table items="[[dayTable]]">
+    <iron-data-table items="[[dayTable.orders]]">
       <data-table-column name="User" filter-by="user.username">
         <template>[[item.user.username]]</template>
       </data-table-column>

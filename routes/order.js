@@ -31,13 +31,31 @@ router.post('/get-orders-day', ensureAuthenticated, function(req, res){
   var id = req.body.day;
   Orders.find({'dayid': req.body.day}).populate('user').exec((err, orders) => {
     if(err) {return res.status(400).send({error: err.message});}
+    var obj = {
+      calc: []
+    }
+    var total = {
+      user: {
+        username: 'Итого'
+      },
+      full: 0,
+      first: 0,
+      second: 0,
+      total: 0
+    }
     _.each(orders, function(order) {
       order.total =
         order.full * process.env.PRICE_FULL +
         order.first * process.env.PRICE_FIRST +
-        order.second * process.env.PRICE_SECOND
+        order.second * process.env.PRICE_SECOND;
+      total.total = total.total + order.total;
+      total.full = total.full + order.full;
+      total.second = total.second + order.second;
+      total.first = total.first + order.first;
     })
-    return res.send(orders);
+    orders.push(total);
+    obj.orders = orders;
+    return res.send(obj);
   });
 });
 
