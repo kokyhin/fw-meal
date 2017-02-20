@@ -11,9 +11,7 @@ var mongoose = require('mongoose');
 
 router.route('/register').post(function(req,res,next) {
   User.findOne({username: req.body.name}, function(err, user) {
-    if (user) {
-      return res.sendStatus(410);
-    }
+    if (user) {return res.status(400).send({error: 'User already registered'});}
     User.register(new User({
       username: req.body.name,
       password: req.body.password,
