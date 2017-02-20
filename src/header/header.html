@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <dom-module id="header-app">
   <template>
     <style>
@@ -28,7 +29,9 @@
           <paper-tab data-page='orders'>Order list</paper-tab>
         </template>
       </paper-tabs>
-      <div class="logOut" on-click='_logOut'>logout</div>
+      <div class="logOut" on-click='_logOut'>
+        <paper-icon-button icon="input"></paper-icon-button>
+      </div>
     </template>
 
   </template>
