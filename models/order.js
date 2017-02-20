@@ -7,6 +7,7 @@ var order = new Schema({
     full:   {type: Number, default: 0},
     first:  {type: Number, default: 0},
     second: {type: Number, default: 0},
+    total: Number,
     user:   {
         type: Schema.ObjectId,
         ref: 'users'

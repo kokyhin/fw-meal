@@ -31,6 +31,12 @@ router.post('/get-orders-day', ensureAuthenticated, function(req, res){
   var id = req.body.day;
   Orders.find({'dayid': req.body.day}).populate('user').exec((err, orders) => {
     if(err) {return res.status(400).send({error: err.message});}
+    _.each(orders, function(order) {
+      order.total =
+        order.full * process.env.PRICE_FULL +
+        order.first * process.env.PRICE_FIRST +
+        order.second * process.env.PRICE_SECOND
+    })
     return res.send(orders);
   });
 });
