@@ -7,6 +7,9 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 
 <dom-module id="day-week">
   <template>
@@ -32,6 +35,12 @@
           text-shadow: 3px 2px 1px #000;
         }
       }
+      paper-radio-button {
+        display: block;
+      }
+      #optionDialog {
+        max-width: 300px !important;
+      }
     </style>
 
     <iron-ajax
@@ -44,6 +53,15 @@
        on-error="_errorResponse">
       </iron-ajax>
 
+
+    <paper-dialog id="optionDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <h2>Первое на выбор</h2>
+      <paper-radio-group selected="{{meal.custom}}">
+        <paper-radio-button cheked name="default">Default</paper-radio-button>
+        <paper-radio-button name="meat">Мясо</paper-radio-button>
+        <paper-radio-button name="cheese">Творог</paper-radio-button>
+      </paper-radio-group>
+    </paper-dialog>
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://www.mumbaifoodie.com/wp-content/uploads/2016/07/International-Food-Trends-350x150.jpg" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
@@ -54,7 +72,9 @@
         </div>
         <div class="card-actions">
           <paper-icon-button disabled$="{{meal.disabled}}" on-click="_makeOrder" icon="save"></paper-icon-button>
-          <!--<paper-icon-button icon="subject"></paper-icon-button>-->
+          <template is="dom-if" if="{{meal.custom}}">
+            <paper-icon-button on-click='_openOptionDialog' icon="build"></paper-icon-button>
+          </template>
         </div>
       </form>
     </paper-card>
@@ -88,6 +108,7 @@
         }
         if(isValid) {
           order.dayid = this.meal.dayid;
+          order.custom = this.meal.custom;
           this.$.orderAjax.body = order;
           this.$.orderAjax.generateRequest();
         } else {
@@ -108,6 +129,10 @@
           Number(second) * Number(price.second);
         this.set('amount', amount);
         return amount
+      },
+
+      _openOptionDialog: function() {
+        this.$.optionDialog.open();
       },
 
       _onOrderResponse: function() {

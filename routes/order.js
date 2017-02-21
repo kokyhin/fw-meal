@@ -174,6 +174,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
           first: 0,
           second: 0,
           full: 0,
+          custom: 'default',
           price: {
             full: process.env.PRICE_FULL,
             first: process.env.PRICE_FIRST,

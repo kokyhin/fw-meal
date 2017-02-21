@@ -8,6 +8,7 @@ var order = new Schema({
     first:  {type: Number, default: 0},
     second: {type: Number, default: 0},
     total: Number,
+    custom: String,
     user:   {
         type: Schema.ObjectId,
         ref: 'users'

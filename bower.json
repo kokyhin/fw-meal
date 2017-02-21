@@ -28,7 +28,9 @@
     "iron-signals": "PolymerElements/iron-signals#^1.0.3",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
     "paper-card": "PolymerElements/paper-card#^1.1.4",
-    "iron-data-table": "Saulis/iron-data-table#^1.0.6"
+    "iron-data-table": "Saulis/iron-data-table#^1.0.6",
+    "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
