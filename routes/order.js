@@ -181,12 +181,6 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
           }
         }
       ]
-      var curDay = new Date().getDate();
-      newWeek.forEach(function (item){
-        if (item.day == curDay) {
-          item.active = true
-        }
-      });
       var weekSchema = {
         weekNumber: curWeek,
         days: newWeek
