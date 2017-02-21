@@ -22,7 +22,11 @@ router.get('/get-orders', ensureAuthenticated, function(req, res){
   var curWeek = new Date().getWeek() + '' +  new Date().getFullYear();
   Week.findOne({'weekNumber': curWeek}, (err, week) =>{
     if(err) {return res.status(400).send({error: err.message});}
-    return res.send(week.days);
+    var response = {
+      active: new Date().getDay() -1,
+      days: week.days
+    }
+    return res.send(response);
   })
 });
 

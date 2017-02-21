@@ -45,8 +45,8 @@
       on-error="_errorResponse"
       on-response="_onGetDayOrders"
     ></iron-ajax>
-    <paper-tabs selected="0" autoselect autoselect-delay="1000">
-      <template is='dom-repeat' items='{{data}}'>
+    <paper-tabs selected="{{activeDay}}" autoselect autoselect-delay="1000">
+      <template is='dom-repeat' items='{{data.days}}'>
         <paper-tab on-click='_getDayTable'>{{item.name}}-{{item.day}}</paper-tab>
       </template>
     </paper-tabs>
@@ -76,7 +76,8 @@
       is: 'fw-orders',
 
       properties: {
-        dayTable : Array
+        dayTable : Array,
+        activeDay: ''
       },
 
       _getDayTable: function(ev) {
@@ -91,7 +92,8 @@
       },
 
       _onGetOrders: function(ev, data) {
-        this.$.getDayOrders.body = {day: data.response[0].dayid};
+        this.set('activeDay', data.response.active)
+        this.$.getDayOrders.body = {day: data.response.days[data.response.active].dayid};
         this.$.getDayOrders.generateRequest();
         window.overlay.show();
       },
