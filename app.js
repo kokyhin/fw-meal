@@ -86,7 +86,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', api);
 
-var staticDir = 'app/build/bundled';
+var staticDir = 'build/bundled';
 if (process.env.NODE_ENV === 'development') {
   staticDir = __dirname;
 }

@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "src/fw-app.html",
   "fragments": [
     "src/fw-login.html",
     "src/fw-orders.html",

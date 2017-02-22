@@ -98,3 +98,15 @@ gulp.task('dev', function() {
     console.log('restarted!');
   });
 });
+
+gulp.task('prod', function() {
+  return $.nodemon({
+    script: 'bin/www',
+    ignore: ['./'],
+    env: {
+      'NODE_ENV': 'production'
+    }
+  }).on('restart', function() {
+    console.log('restarted!');
+  });
+});
