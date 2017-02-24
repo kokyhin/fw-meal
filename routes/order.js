@@ -63,8 +63,17 @@ router.post('/get-orders-day', ensureAuthenticated, function(req, res){
   });
 });
 
+function getWeek () {
+  var date = new Date();
+  if ((date.getDay() == 5 && date.getHours() > 13) || date.getDay() > 5) {
+    return date.getWeek() + 1 + '' +  date.getFullYear();
+  } else {
+    return date.getWeek() + '' +  date.getFullYear();
+  }
+}
+
 router.get('/get-week', ensureAuthenticated, function(req, res) {
-  var curWeek = new Date().getWeek() + '' +  new Date().getFullYear();
+  var curWeek = getWeek();
   Week.findOne({'weekNumber': curWeek}, (err, week) =>{
     if(err) {return res.status(400).send({error: err.message});}
     if (week) {
