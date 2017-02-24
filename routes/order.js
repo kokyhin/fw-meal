@@ -20,11 +20,21 @@ Date.prototype.getWeek = function() {
 }
 
 router.get('/get-orders', ensureAuthenticated, function(req, res){
-  var curWeek = new Date().getWeek() + '' +  new Date().getFullYear();
+  var curWeek;
+  var activeDay = new Date().getDay() -1;
+  var date = new Date();
+  if ((date.getDay() == 5 && date.getHours() > 13) || date.getDay() > 5) {
+    curWeek = date.getWeek() + 1 + '' +  date.getFullYear();
+    activeDay = 0;
+  } else {
+    curWeek = date.getWeek() + '' +  date.getFullYear();
+  }
+
   Week.findOne({'weekNumber': curWeek}, (err, week) =>{
     if(err) {return res.status(400).send({error: err.message});}
+    if(week == null) {return res.status(400).send({error: 'Missing week'});}
     var response = {
-      active: new Date().getDay() -1,
+      active: activeDay,
       days: week.days
     }
     return res.send(response);
