@@ -2,6 +2,7 @@ var express  = require('express');
 var router   = express.Router();
 var mongoose = require('mongoose');
 var Week = require('../models/week');
+var moment = require('moment');
 var Orders = require('../models/order')
 var _ = require('underscore');
 
@@ -29,7 +30,6 @@ router.get('/get-orders', ensureAuthenticated, function(req, res){
     return res.send(response);
   })
 });
-
 
 router.post('/get-orders-day', ensureAuthenticated, function(req, res){
   var id = req.body.day;
@@ -99,31 +99,23 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         return res.send(week);
       });
     } else {
-      function getMonday(d) {
-        d = new Date(d);
-        if(d.getDay() == 5 && d.getHours() > 13) {
-          d.setDate(d.getDate() + 3);
-          var day = d.getDay(),
-              diff = d.getDate() - day + 1;
-          return new Date(d.setDate(diff));
-        } else if (d.getDay() > 5) {
-          d.setDate(d.getDate() + 3);
-          var day = d.getDay(),
-              diff = d.getDate() - day + 1;
-          return new Date(d.setDate(diff));
-        } else {
-          var day = d.getDay(),
-              diff = d.getDate() - day + 1; // adjust when day is sunday
-          return new Date(d.setDate(diff));
+      var nextWeek = false;
+      function dayCalc (i) {
+        if (nextWeek) {
+          return moment().add(1, 'weeks').day(0).add(i, 'days').date()
         }
+        return moment().day(0).add(i, 'days').date()
       }
-      var day = getMonday(new Date());
+      var day = moment();
+      if ((day.day() == 5 && day.hour() > 13) || day.day() > 5 ) {
+        nextWeek = true;
+      }
       var newWeek = [
         {
           name: 'Пн',
-          day: day.getDate(),
+          day: dayCalc(1),
           active: false,
-          dayid: Number(day.getDate() + '' + day.getMonth() + '' + day.getFullYear()),
+          dayid: Number(dayCalc(1) + '' + day.month() + '' + day.year()),
           first: 0,
           second: 0,
           full: 0,
@@ -135,9 +127,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         },
         {
           name: 'Вт',
-          day: day.getDate() + 1,
+          day: dayCalc(2),
           active: false,
-          dayid: Number(day.getDate() + 1 + '' + day.getMonth() + '' + day.getFullYear()),
+          dayid: Number(dayCalc(2) + '' + day.month() + '' + day.year()),
           first: 0,
           second: 0,
           full: 0,
@@ -149,9 +141,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         },
         {
           name: 'Ср',
-          day: day.getDate() + 2,
+          day: dayCalc(3),
           active: false,
-          dayid: Number(day.getDate() + 2 + '' + day.getMonth() + '' + day.getFullYear()),
+          dayid: Number(dayCalc(3) + '' + day.month() + '' + day.year()),
           first: 0,
           second: 0,
           full: 0,
@@ -163,9 +155,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         },
         {
           name: 'Чт',
-          day: day.getDate() + 3,
+          day: dayCalc(4),
           active: false,
-          dayid: Number(day.getDate() + 3 + '' + day.getMonth() + '' + day.getFullYear()),
+          dayid: Number(dayCalc(4) + '' + day.month() + '' + day.year()),
           first: 0,
           second: 0,
           full: 0,
@@ -177,9 +169,9 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         },
         {
           name: 'Пт',
-          day: day.getDate() + 4,
+          day: dayCalc(5),
           active: false,
-          dayid: Number(day.getDate() + 4 + '' + day.getMonth() + '' + day.getFullYear()),
+          dayid: Number(dayCalc(5) + '' + day.month() + '' + day.year()),
           first: 0,
           second: 0,
           full: 0,
