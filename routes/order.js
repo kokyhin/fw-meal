@@ -95,14 +95,21 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
             item.active = true
           }
         });
+        var date = moment();
         week.days.forEach(function(day) {
           var id = Number(day.dayid);
+          var isDisabled = false;
+          if (date.date() == (day.day - 1) && date.hour() >= 15) {
+            isDisabled = true
+          } else if (date.date() > day.day) {
+            isDisabled = true;
+          }
           for(var i=0; i<user.orders.length; i++) {
             if(user.orders[i].dayid == id) {
               day.second = user.orders[i].second;
               day.first = user.orders[i].first;
               day.full = user.orders[i].full;
-              day.disabled = true
+              day.disabled = isDisabled;
             }
           }
         }, this);
@@ -210,7 +217,7 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   var date = moment();
   var orderDay = Number(req.body.dayid.toString().substring(0,2));
   if(date.date() == orderDay && date.hour() >= 10) {
-    return res.status(400).send({error: 'Sorry, you are yo late'});
+    return res.status(400).send({error: 'Sorry, you are to late'});
   }
   mongoose.model('orders').create(req.body, function(err, order) {
     if(err) {return res.status(400).send({error: err.message});}
