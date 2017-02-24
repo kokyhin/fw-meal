@@ -219,17 +219,24 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   if(date.date() == orderDay && date.hour() >= 10) {
     return res.status(400).send({error: 'Sorry, you are to late'});
   }
-  mongoose.model('orders').create(req.body, function(err, order) {
+  Orders.findOneAndUpdate({'dayid': req.body.dayid, 'user': req.user._id}, req.body, {upsert: false}, function(err, order) {
     if(err) {return res.status(400).send({error: err.message});}
-    mongoose.model('users').findOne({'_id': req.user._id}, function(err, user){
-      if(err) {return res.status(400).send({error: err.message});}
-      user.orders.push(order);
-      user.save();
-      order.user = req.user._id;
-      order.save();
-      res.send('Order saved')
-    })
-  })
+    if (err == null & order == null) {
+      Orders.create(req.body, function(err, order) {
+        if(err) {return res.status(400).send({error: err.message});}
+        mongoose.model('users').findOne({'_id': req.user._id}, function(err, user){
+          if(err) {return res.status(400).send({error: err.message});}
+          user.orders.push(order);
+          user.save();
+          order.user = req.user._id;
+          order.save();
+          return res.send('Order saved');
+        })
+      })
+    } else {
+      return res.send('Order updated');
+    }
+  });
 });
 
 module.exports = router;

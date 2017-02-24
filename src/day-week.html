@@ -117,16 +117,14 @@
 
       _makeOrder: function(ev) {
         var order = {
-          full: this.meal.full,
-          first: this.meal.first,
-          second: this.meal.second,
+          full: Number(this.meal.full),
+          first: Number(this.meal.first),
+          second: Number(this.meal.second),
         }
         var isValid = false
         for(var key in order) {
           if (order[key] && Number(order[key]) > 0) {
             isValid = true
-          } else {
-            delete order[key]
           }
         }
         if(isValid) {
