@@ -207,6 +207,11 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
 });
 
 router.post('/create', ensureAuthenticated, function(req, res) {
+  var date = moment();
+  var orderDay = Number(req.body.dayid.toString().substring(0,2));
+  if(date.date() == orderDay && date.hour() >= 10) {
+    return res.status(400).send({error: 'Sorry, you are yo late'});
+  }
   mongoose.model('orders').create(req.body, function(err, order) {
     if(err) {return res.status(400).send({error: err.message});}
     mongoose.model('users').findOne({'_id': req.user._id}, function(err, user){
