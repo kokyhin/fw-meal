@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
 
 <dom-module id="day-week">
   <template>
@@ -41,6 +42,9 @@
       #optionDialog {
         max-width: 300px !important;
       }
+      paper-button.iron-selected {
+        background-color: #efeb58;
+      }
     </style>
 
     <iron-ajax
@@ -65,9 +69,24 @@
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://www.mumbaifoodie.com/wp-content/uploads/2016/07/International-Food-Trends-350x150.jpg" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='full' value='{{meal.full}}' label="Полное"></paper-input>
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='first' value='{{meal.first}}' label="Первое"></paper-input>
-          <paper-input disabled$="{{meal.disabled}}" type='number' name='second' value='{{meal.second}}' label="Второе"></paper-input>
+          <span>Полное</span>
+          <paper-button-group selected="{{meal.full}}">
+            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          </paper-button-group>
+          <span>Первое</span>
+          <paper-button-group selected="{{meal.first}}">
+            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          </paper-button-group>
+          <span>Второе</span>
+          <paper-button-group selected="{{meal.second}}">
+            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          </paper-button-group>
           <div>{{_calc(meal.full,meal.first,meal.second)}} MDL</div>
         </div>
         <div class="card-actions">
@@ -97,7 +116,11 @@
       },
 
       _makeOrder: function(ev) {
-        var order = ev.currentTarget.parentElement.parentElement.serialize();
+        var order = {
+          full: this.meal.full,
+          first: this.meal.first,
+          second: this.meal.second,
+        }
         var isValid = false
         for(var key in order) {
           if (order[key] && Number(order[key]) > 0) {

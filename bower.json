@@ -30,7 +30,8 @@
     "paper-card": "PolymerElements/paper-card#^1.1.4",
     "iron-data-table": "Saulis/iron-data-table#^1.0.6",
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "paper-button-group": "Protoss78/paper-button-group#^0.0.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
