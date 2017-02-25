@@ -11,9 +11,11 @@
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="day-week">
   <template>
+    <style include='iron-flex'></style>
     <style>
       :host {
         display: block;
@@ -45,6 +47,10 @@
       paper-button.iron-selected {
         background-color: #efeb58;
       }
+      paper-button-group paper-button {
+        min-width: 0;
+        flex: 1;
+      }
     </style>
 
     <iron-ajax
@@ -56,7 +62,6 @@
        on-response="_onOrderResponse"
        on-error="_errorResponse">
       </iron-ajax>
-
 
     <paper-dialog id="optionDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>Второе на выбор</h2>
@@ -70,22 +75,22 @@
       <form is="iron-form">
         <div class="card-content">
           <span>Полное</span>
-          <paper-button-group selected="{{meal.full}}">
-            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          <paper-button-group class='layout horizontal' selected="{{meal.full}}">
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
           <span>Первое</span>
-          <paper-button-group selected="{{meal.first}}">
-            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          <paper-button-group class='layout horizontal' selected="{{meal.first}}">
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
           <span>Второе</span>
-          <paper-button-group selected="{{meal.second}}">
-            <paper-button toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
-            <paper-button toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
+          <paper-button-group class='layout horizontal' selected="{{meal.second}}">
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
+            <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
           <div>{{_calc(meal.full,meal.first,meal.second)}} MDL</div>
         </div>
