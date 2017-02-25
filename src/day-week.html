@@ -49,7 +49,21 @@
       }
       paper-button-group paper-button {
         min-width: 0;
-        flex: 1;
+      }
+      .title {
+        display: block;
+        margin-top: 10px;
+        padding-left: 5px;
+      }
+      .amount {
+        padding-top: 15px;
+        font-weight: bold;
+        text-align: right;
+        border-top: 2px solid #ddd;
+        margin-top: 10px;
+      }
+      .card-actions {
+        text-align: right;
       }
     </style>
 
@@ -74,31 +88,31 @@
     <paper-card class$="{{_isActive(meal.active)}}" heading="{{meal.name}}/{{meal.day}}" image="http://www.mumbaifoodie.com/wp-content/uploads/2016/07/International-Food-Trends-350x150.jpg" alt="Emmental">
       <form is="iron-form">
         <div class="card-content">
-          <span>Полное</span>
+          <span class='title'>Полное</span>
           <paper-button-group class='layout horizontal' selected="{{meal.full}}">
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
-          <span>Первое</span>
+          <span class='title'>Первое</span>
           <paper-button-group class='layout horizontal' selected="{{meal.first}}">
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
-          <span>Второе</span>
+          <span class='title'>Второе</span>
           <paper-button-group class='layout horizontal' selected="{{meal.second}}">
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="0">0</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="1">1</paper-button>
             <paper-button class='flex' toggles disabled$="{{meal.disabled}}" name="2">2</paper-button>
           </paper-button-group>
-          <div>{{_calc(meal.full,meal.first,meal.second)}} MDL</div>
+          <div class="amount">{{_calc(meal.full,meal.first,meal.second)}} MDL</div>
         </div>
         <div class="card-actions">
-          <paper-icon-button disabled$="{{meal.disabled}}" on-click="_makeOrder" icon="save"></paper-icon-button>
           <template is="dom-if" if="{{meal.custom}}">
             <paper-icon-button on-click='_openOptionDialog' icon="build"></paper-icon-button>
           </template>
+          <paper-icon-button disabled$="{{meal.disabled}}" on-click="_makeOrder" icon="save"></paper-icon-button>
         </div>
       </form>
     </paper-card>
