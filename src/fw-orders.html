@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 
 <dom-module id="fw-orders">
   <template>
@@ -20,10 +21,9 @@
           color: #fff;
         }
       }
-      /*iron-data-table data-table-row:last-child {
-        find another way to select last row
+      .total {
         background-color: #c4da1b !important;
-      }*/
+      }
     </style>
 
     <iron-ajax id="getOrders"
@@ -45,13 +45,21 @@
       on-error="_errorResponse"
       on-response="_onGetDayOrders"
     ></iron-ajax>
+
+    <iron-ajax id="updateOrder"
+      method="POST"
+      url="/api/order/update-order"
+      handle-as="json"
+      content-type="application/json"
+      on-error="_errorResponse"
+    ></iron-ajax>
     <paper-tabs selected="{{activeDay}}" autoselect autoselect-delay="1000">
       <template is='dom-repeat' items='{{data.days}}'>
         <paper-tab on-click='_getDayTable'>{{item.name}}-{{item.day}}</paper-tab>
       </template>
     </paper-tabs>
 
-    <iron-data-table items="[[dayTable.orders]]">
+    <iron-data-table id='orderTable' items="[[dayTable]]">
       <data-table-column name="User" filter-by="user.username">
         <template>[[item.user.username]]</template>
       </data-table-column>
@@ -69,6 +77,11 @@
       </data-table-column>
       <data-table-column name="Options">
         <template>[[item.custom]]</template>
+      </data-table-column>
+      <data-table-column name="Оплачено">
+        <template>
+          <paper-checkbox on-change="_updateOrder" checked={{item.payed}}></paper-checkbox>
+        </template>
       </data-table-column>
     </iron-data-table>
 
@@ -89,9 +102,22 @@
         window.overlay.show();
       },
 
+      _updateOrder: function(ev){
+        this.$.updateOrder.body = {
+          id: ev.model.item._id,
+          payed: ev.model.item.payed
+        };
+        this.$.updateOrder.generateRequest();
+      },
+
       _onGetDayOrders: function(ev, data) {
         this.set('dayTable', data.response);
-        window.overlay.hide()
+        window.overlay.hide();
+        this.$.orderTable.querySelectorAll('data-table-row').forEach(function(element) {
+          element.classList -= ' total'
+        }, this);
+        var index = data.response.length;
+        this.$.orderTable.querySelectorAll('data-table-row')[index].classList += ' total'
       },
 
       _onGetOrders: function(ev, data) {

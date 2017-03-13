@@ -9,6 +9,7 @@ var order = new Schema({
     second: {type: Number, default: 0},
     total: Number,
     custom: String,
+    payed: {type: Boolean, default: false},
     user:   {
         type: Schema.ObjectId,
         ref: 'users'

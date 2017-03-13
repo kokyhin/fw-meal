@@ -45,9 +45,6 @@ router.post('/get-orders-day', ensureAuthenticated, function(req, res){
   var id = req.body.day;
   Orders.find({'dayid': req.body.day}).populate('user').exec((err, orders) => {
     if(err) {return res.status(400).send({error: err.message});}
-    var obj = {
-      calc: []
-    }
     var total = {
       user: {
         username: 'Итого'
@@ -66,10 +63,9 @@ router.post('/get-orders-day', ensureAuthenticated, function(req, res){
       total.full = total.full + order.full;
       total.second = total.second + order.second;
       total.first = total.first + order.first;
-    })
+    });
     orders.push(total);
-    obj.orders = orders;
-    return res.send(obj);
+    return res.send(orders);
   });
 });
 
@@ -236,6 +232,14 @@ router.post('/create', ensureAuthenticated, function(req, res) {
     } else {
       return res.send('Order updated');
     }
+  });
+});
+
+router.post('/update-order', ensureAuthenticated, function(req, res){
+
+  Orders.findOneAndUpdate({'_id': req.body.id}, {payed: req.body.payed}, {upsert: false}, function(err, order){
+    if(err) {return res.status(400).send({error: err.message});}
+    return res.send('Updated');
   });
 });
 
