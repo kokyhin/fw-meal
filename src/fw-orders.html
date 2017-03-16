@@ -6,6 +6,11 @@
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-button-group/paper-button-group.html">
 
 <dom-module id="fw-orders">
   <template>
@@ -23,6 +28,20 @@
       }
       .total {
         background-color: #c4da1b !important;
+      }
+      paper-radio-button {
+        display: block;
+      }
+      paper-button.iron-selected {
+        background-color: #efeb58;
+      }
+      .title {
+        display: block;
+        margin-top: 10px;
+        padding-left: 5px;
+      }
+      #editDialog {
+        padding: 0 15px 10px;
       }
     </style>
 
@@ -46,18 +65,56 @@
       on-response="_onGetDayOrders"
     ></iron-ajax>
 
+    <iron-ajax id="updatePayed"
+      method="POST"
+      url="/api/order/update-payed"
+      handle-as="json"
+      content-type="application/json"
+      on-error="_errorResponse"
+    ></iron-ajax>
+
     <iron-ajax id="updateOrder"
       method="POST"
       url="/api/order/update-order"
       handle-as="json"
       content-type="application/json"
       on-error="_errorResponse"
+      on-response="_orderUpdated"
     ></iron-ajax>
     <paper-tabs selected="{{activeDay}}" autoselect autoselect-delay="1000">
       <template is='dom-repeat' items='{{data.days}}'>
         <paper-tab on-click='_getDayTable'>{{item.name}}-{{item.day}}</paper-tab>
       </template>
     </paper-tabs>
+
+    <paper-dialog id='editDialog'>
+      <paper-dialog-scrollable>
+        <div class="card-content">
+          <span class='title'>Полное</span>
+          <paper-button-group class='layout horizontal' selected="{{orderEdit.full}}">
+            <paper-button class='flex' toggles name="0">0</paper-button>
+            <paper-button class='flex' toggles name="1">1</paper-button>
+            <paper-button class='flex' toggles name="2">2</paper-button>
+          </paper-button-group>
+          <span class='title'>Первое</span>
+          <paper-button-group class='layout horizontal' selected="{{orderEdit.first}}">
+            <paper-button class='flex' toggles name="0">0</paper-button>
+            <paper-button class='flex' toggles name="1">1</paper-button>
+            <paper-button class='flex' toggles name="2">2</paper-button>
+          </paper-button-group>
+          <span class='title'>Второе</span>
+          <paper-button-group class='layout horizontal' selected="{{orderEdit.second}}">
+            <paper-button class='flex' toggles name="0">0</paper-button>
+            <paper-button class='flex' toggles name="1">1</paper-button>
+            <paper-button class='flex' toggles name="2">2</paper-button>
+          </paper-button-group>
+        </div>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button raised dialog-dismiss>Cancel</paper-button>
+        <paper-button raised dialog-confirm on-click='_updateOrder'>Accept</paper-button>
+      </div>
+    </paper-dialog>
 
     <iron-data-table id='orderTable' items="[[dayTable]]">
       <data-table-column name="User" filter-by="user.username">
@@ -80,7 +137,12 @@
       </data-table-column>
       <data-table-column name="Оплачено">
         <template>
-          <paper-checkbox on-change="_updateOrder" checked={{item.payed}}></paper-checkbox>
+          <paper-checkbox on-change="_updatePayed" checked={{item.payed}}></paper-checkbox>
+        </template>
+      </data-table-column>
+      <data-table-column name="Edit">
+        <template>
+          <paper-icon-button on-click='_openEditDialog' icon="image:edit"></paper-icon-button>
         </template>
       </data-table-column>
     </iron-data-table>
@@ -93,7 +155,8 @@
 
       properties: {
         dayTable : Array,
-        activeDay: ''
+        activeDay: '',
+        orderEdit: Object
       },
 
       _getDayTable: function(ev) {
@@ -102,12 +165,27 @@
         window.overlay.show();
       },
 
-      _updateOrder: function(ev){
-        this.$.updateOrder.body = {
+      _updatePayed: function(ev){
+        this.$.updatePayed.body = {
           id: ev.model.item._id,
           payed: ev.model.item.payed
         };
+        this.$.updatePayed.generateRequest();
+      },
+
+      _openEditDialog: function(ev) {
+        this.set('orderEdit', ev.model.item);
+        this.$.editDialog.open();
+      },
+
+      _updateOrder: function() {
+        this.$.updateOrder.body = this.orderEdit;
         this.$.updateOrder.generateRequest();
+      },
+
+      _orderUpdated: function(ev, data) {
+        this.$.getDayOrders.body = {day: data.response.dayid};
+        this.$.getDayOrders.generateRequest();
       },
 
       _onGetDayOrders: function(ev, data) {

@@ -244,11 +244,17 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   });
 });
 
-router.post('/update-order', ensureAuthenticated, function(req, res){
-
+router.post('/update-payed', ensureAuthenticated, function(req, res){
   Orders.findOneAndUpdate({'_id': req.body.id}, {payed: req.body.payed}, {upsert: false}, function(err, order){
     if(err) {return res.status(400).send({error: err.message});}
     return res.send('Updated');
+  });
+});
+
+router.post('/update-order', ensureAuthenticated, function(req, res){
+  Orders.findOneAndUpdate({'_id': req.body._id}, req.body, {upsert: false}, function(err, order){
+    if(err) {return res.status(400).send({error: err.message});}
+    return res.send(order);
   });
 });
 
