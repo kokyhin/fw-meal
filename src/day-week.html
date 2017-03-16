@@ -140,20 +140,10 @@
           first: Number(this.meal.first),
           second: Number(this.meal.second),
         }
-        var isValid = false
-        for(var key in order) {
-          if (order[key] && Number(order[key]) > 0) {
-            isValid = true
-          }
-        }
-        if(isValid) {
-          order.dayid = this.meal.dayid;
-          order.custom = this.meal.custom;
-          this.$.orderAjax.body = order;
-          this.$.orderAjax.generateRequest();
-        } else {
-          this.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Fill order'}});
-        }
+        order.dayid = this.meal.dayid;
+        order.custom = this.meal.custom;
+        this.$.orderAjax.body = order;
+        this.$.orderAjax.generateRequest();
       },
 
       _isActive: function() {

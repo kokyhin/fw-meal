@@ -218,6 +218,14 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   Orders.findOneAndUpdate({'dayid': req.body.dayid, 'user': req.user._id}, req.body, {upsert: false}, function(err, order) {
     if(err) {return res.status(400).send({error: err.message});}
     if (err == null & order == null) {
+      var isValid = false
+      for(var key in req.body) {
+        if(key == 'dayid' ) continue;
+        if (req.body[key] && Number(req.body[key]) > 0) {
+          isValid = true
+        }
+      }
+      if (!isValid) {return res.status(400).send({error: 'Fill order please'})}
       Orders.create(req.body, function(err, order) {
         if(err) {return res.status(400).send({error: err.message});}
         mongoose.model('users').findOne({'_id': req.user._id}, function(err, user){
