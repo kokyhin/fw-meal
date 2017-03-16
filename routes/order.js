@@ -99,6 +99,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
             isDisabled = true
           } else if (date.date() > day.day) {
             isDisabled = true;
+            day.disabled = true
           }
           for(var i=0; i<user.orders.length; i++) {
             if(user.orders[i].dayid == id) {
