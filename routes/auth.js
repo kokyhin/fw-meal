@@ -4,6 +4,7 @@ var Codes    = require('../models/codes')
 var express  = require('express');
 var router   = express.Router();
 var mongoose = require('mongoose');
+nodemailer = require('nodemailer');
 
 // var nodemailer = require('nodemailer');
 // var bcrypt = require('bcrypt-nodejs');
@@ -36,8 +37,27 @@ router.route('/register').post(function(req,res,next) {
           return res.status(400).send({error: err.message});
         }
         let activationURL = process.env.APP_URL + '?activation=' + code._id;
-        // Send email activation
-        res.send({result: "ok"});
+        let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.MAIL_ACC,
+            pass: process.env.MAIL_PASS
+          }
+        });
+
+        let mailOptions = {
+          from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
+          to: 'kokyhin@gmail.com',
+          subject: 'Meal profile activation',
+          text: 'Follow link to activate profile ' + activationURL
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            return console.log(error);
+          }
+          res.send({result: "ok"});
+        });
       });
     });
   });
