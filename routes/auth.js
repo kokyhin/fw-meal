@@ -49,7 +49,7 @@ router.route('/register').post(function(req,res,next) {
           from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
           to: 'kokyhin@gmail.com',
           subject: 'Meal profile activation',
-          text: 'Follow link to activate profile ' + activationURL
+          text: 'Username to login: ' + newUser.username + '\n Follow link to activate profile ' + activationURL,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
