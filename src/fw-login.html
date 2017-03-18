@@ -6,7 +6,6 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<!--<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">-->
 <link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
 <link rel="import" href="../bower_components/paper-password-input/match-passwords-validator.html">
 <link rel="import" href="../bower_components/paper-password-input/min-length-validator.html">
@@ -76,7 +75,7 @@
         <iron-pages selected="{{activeTab}}">
           <div>
             <form is="iron-form" id="loginForm">
-              <paper-input name="username" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
+              <paper-input name="username" label="E-mail" required error-message="Required field"></paper-input>
               <min-length-validator id="min-length-validator" min-length="4"></min-length-validator>
               <paper-password-input auto-validate label="Password" id='loginPassword' validator="min-length-validator" error-message="Enter at least 4 characters"></paper-password-input>
               <paper-button on-click='_submitLoginForm' raised>Submit</paper-button>
@@ -85,11 +84,10 @@
 
           <div>
             <form is="iron-form" id="registerForm">
-              <paper-input name="name" label="Name" minlength="4" required error-message="Required at least 4 digits"></paper-input>
+              <paper-input name="email" label="E-mail" required type="email"></paper-input>
               <match-passwords-validator id="match-passwords-validator" password="[[password]]"></match-passwords-validator>
               <paper-password-input name="password" label="Password" value="{{password}}"></paper-password-input>
               <paper-password-input label="Confirm" id='RegPass' auto-validate validator="match-passwords-validator" error-message="Passwords need to match"></paper-password-input>
-              <!--<gold-email-input name="email" label="E-mail" required error-message="Invalid Email"></gold-email-input>-->
               <paper-button on-click='_submitRegisterForm' raised>Submit</paper-button>
             </form>
           </div>
@@ -139,6 +137,7 @@
         if(this.$.loginForm.validate() && checkLoginPassword(this.$.loginPassword.value)) {
           var body = this.$.loginForm.serialize();
           body.password = this.$.loginPassword.value;
+          body.code = this.route.__queryParams.activation || '';
           this.$.loginAjax.body = body;
           this.$.loginAjax.generateRequest();
           window.overlay.show();
@@ -159,12 +158,14 @@
         app.set('user', null);
         if (error.request.status == '401') {
           this.fire('iron-signal', {name:'toast', data: {type: 'error', message: 'Bad username and password combination'}});
+        } else {
+          this.fire('iron-signal', {name:'toast', data: {type: 'error', message: error.request.response.error}});
         }
         overlay.hide();
       },
 
       _onRegister: function() {
-        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'You have successfully registered.  Please Login.'}});
+        this.fire('iron-signal', {name:'toast', data: {type: 'success', message: 'Please check your email to activate your account.'}});
         this.$.registerForm.reset();
         this.set('activeTab', 0)
         window.overlay.hide();
