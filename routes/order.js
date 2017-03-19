@@ -213,7 +213,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
 router.post('/create', ensureAuthenticated, function(req, res) {
   var date = moment();
   var orderDay = Number(req.body.dayid.toString().substring(0,2));
-  if(date.date() == orderDay && date.hour() >= 10) {
+  if(date.date() == orderDay && date.hour() >= 9) {
     return res.status(400).send({error: 'Sorry, you are to late'});
   }
   Orders.findOneAndUpdate({'dayid': req.body.dayid, 'user': req.user._id}, req.body, {upsert: false}, function(err, order) {
