@@ -6,11 +6,6 @@ var router   = express.Router();
 var mongoose = require('mongoose');
 nodemailer = require('nodemailer');
 
-// var nodemailer = require('nodemailer');
-// var bcrypt = require('bcrypt-nodejs');
-// var async = require('async');
-// var crypto = require('crypto');
-
 router.route('/register').post(function(req,res,next) {
   let mail = req.body.email;
   let isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail);
