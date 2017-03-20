@@ -42,7 +42,7 @@ router.route('/register').post(function(req,res,next) {
 
         var mailOptions = {
           from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
-          to: 'kokyhin@gmail.com',
+          to: newUser.email,
           subject: 'Meal profile activation',
           text: 'Username to login: ' + newUser.username + '\n Follow link to activate profile ' + activationURL,
         };
