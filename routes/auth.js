@@ -4,13 +4,13 @@ var Codes    = require('../models/codes')
 var express  = require('express');
 var router   = express.Router();
 var mongoose = require('mongoose');
-nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
 
 router.route('/register').post(function(req,res,next) {
-  let mail = req.body.email;
-  let isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail);
-  let isCorporativeEmail = function(mail) {
-    let mailParts = mail.split('@');
+  var mail = req.body.email;
+  var isValidEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail);
+  var isCorporativeEmail = function(mail) {
+    var mailParts = mail.split('@');
     return mailParts[1] == 'fusionworks.md';
   }
   if(!isValidEmail || !isCorporativeEmail(mail)) {
@@ -31,8 +31,8 @@ router.route('/register').post(function(req,res,next) {
         if (err) {
           return res.status(400).send({error: err.message});
         }
-        let activationURL = process.env.APP_URL + '?activation=' + code._id;
-        let transporter = nodemailer.createTransport({
+        var activationURL = process.env.APP_URL + '?activation=' + code._id;
+        var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
             user: process.env.MAIL_ACC,
@@ -40,7 +40,7 @@ router.route('/register').post(function(req,res,next) {
           }
         });
 
-        let mailOptions = {
+        var mailOptions = {
           from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
           to: 'kokyhin@gmail.com',
           subject: 'Meal profile activation',
