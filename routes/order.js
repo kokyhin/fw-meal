@@ -214,7 +214,7 @@ router.post('/create', ensureAuthenticated, function(req, res) {
   var date = moment();
   var orderDay = Number(req.body.dayid.toString().substring(0,2));
   if(date.date() == orderDay && date.hour() >= 9) {
-    return res.status(400).send({error: 'Sorry, you are to late'});
+    return res.status(400).send({error: 'Sorry, you are too late'});
   }
   Orders.findOneAndUpdate({'dayid': req.body.dayid, 'user': req.user._id}, req.body, {upsert: false}, function(err, order) {
     if(err) {return res.status(400).send({error: err.message});}
