@@ -11,7 +11,7 @@ module.exports = {
         PRICE_FULL: 40,
         APP_URL: 'http://meal.fusionworks.md/',
         MAIL_ACC: 'fwmeal@gmail.com',
-        MAIL_PASS: 'pass'
+        // MAIL_PASS: 'pass'
       }
     }
   ],
