@@ -185,7 +185,7 @@ function sendLetter(text) {
 
   var mailOptions = {
     from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
-    to: 'kokyhin@gmail.com',
+    to: 'Eynsteyn@hotmail.com',
     subject: 'Заказы',
     text: text,
   };
