@@ -14,7 +14,7 @@ router.route('/register').post(function(req,res,next) {
     return mailParts[1] == 'fusionworks.md';
   }
   if(!isValidEmail || !isCorporativeEmail(mail)) {
-    return res.status(400).send({error: 'Invalid email, use corporative Email'});
+    return res.status(400).send({error: 'Invalid email, use corporate Email'});
   }
 
   User.findOne({email: mail}, function(err, user) {
