@@ -7,6 +7,10 @@ var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var fs            = require('fs');
 var api           = require('./routes/api');
+var schedule      = require('node-schedule');
+var Orders        = require('./models/order');
+var _             = require('underscore');
+var nodemailer    = require('nodemailer');
 
 var app           = express();
 var env           = process.env.NODE_ENV || 'development';
@@ -115,5 +119,82 @@ app.use(function(req, res, next){
   // default to plain-text. send()
   res.type('txt').send('Not found');
 });
+
+var ruleEvening = new schedule.RecurrenceRule();
+ruleEvening.dayOfWeek = [0, new schedule.Range(1, 5)];
+ruleEvening.hour = 17;
+ruleEvening.minute = 1;
+
+var sendEvening = schedule.scheduleJob(ruleEvening, function(){
+  var d = new Date();
+  var dayid = d.getDate() +1 + '' + d.getMonth() + '' + d.getFullYear();
+  sendEveningMail(dayid)
+});
+
+var ruleMorning = new schedule.RecurrenceRule();
+ruleMorning.dayOfWeek = [0, new schedule.Range(1, 5)];
+ruleMorning.hour = 17;
+ruleMorning.minute = 1;
+
+var sendMorning = schedule.scheduleJob(ruleMorning, function(){
+  var d = new Date();
+  var dayid = d.getDate() + '' + d.getMonth() + '' + d.getFullYear();
+  sendEveningMail(dayid)
+});
+
+function sendEveningMail(id) {
+  Orders.find({'dayid': id}, (err, orders) => {
+    if(err) {return res.status(400).send({error: err.message});}
+    var total = {
+      user: {
+        username: 'Итого'
+      },
+      full: 0,
+      first: 0,
+      second: 0,
+      total: 0
+    }
+    _.each(orders, function(order) {
+      order.total =
+        order.full * process.env.PRICE_FULL +
+        order.first * process.env.PRICE_FIRST +
+        order.second * process.env.PRICE_SECOND;
+      total.total = total.total + order.total;
+      total.full = total.full + order.full;
+      total.second = total.second + order.second;
+      total.first = total.first + order.first;
+    });
+    var plainText = `
+       Полных - ${total.full}
+       Первое - ${total.first}
+       Второе - ${total.second}
+       Итого - ${total.total}
+    `
+    sendLetter(plainText)
+  });
+}
+
+function sendLetter(text) {
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.MAIL_ACC,
+      pass: process.env.MAIL_PASS
+    }
+  });
+
+  var mailOptions = {
+    from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
+    to: 'kokyhin@gmail.com',
+    subject: 'Заказы',
+    text: text,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+  });
+}
 
 module.exports = app;

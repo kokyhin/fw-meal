@@ -95,9 +95,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
         week.days.forEach(function(day) {
           var id = Number(day.dayid);
           var isDisabled = false;
-          if (date.date() == (day.day - 1) && date.hour() >= 15) {
-            isDisabled = true
-          } else if (date.date() > day.day) {
+          if (date.date() -1 > day.day) {
             isDisabled = true;
             day.disabled = true
           }
