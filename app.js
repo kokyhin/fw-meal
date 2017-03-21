@@ -123,7 +123,7 @@ app.use(function(req, res, next){
 var ruleEvening = new schedule.RecurrenceRule();
 ruleEvening.dayOfWeek = [0, new schedule.Range(1, 5)];
 ruleEvening.hour = 17;
-ruleEvening.minute = 10;
+ruleEvening.minute = 0;
 
 var sendEvening = schedule.scheduleJob(ruleEvening, function(){
   var d = new Date();
@@ -133,8 +133,8 @@ var sendEvening = schedule.scheduleJob(ruleEvening, function(){
 
 var ruleMorning = new schedule.RecurrenceRule();
 ruleMorning.dayOfWeek = [0, new schedule.Range(1, 5)];
-ruleMorning.hour = 8;
-ruleMorning.minute = 10;
+ruleMorning.hour = 9;
+ruleMorning.minute = 0;
 
 var sendMorning = schedule.scheduleJob(ruleMorning, function(){
   var d = new Date();
