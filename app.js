@@ -128,7 +128,7 @@ ruleEvening.minute = 1;
 var sendEvening = schedule.scheduleJob(ruleEvening, function(){
   var d = new Date();
   var dayid = d.getDate() +1 + '' + d.getMonth() + '' + d.getFullYear();
-  sendEveningMail(dayid)
+  generateOrders(dayid)
 });
 
 var ruleMorning = new schedule.RecurrenceRule();
@@ -139,10 +139,10 @@ ruleMorning.minute = 1;
 var sendMorning = schedule.scheduleJob(ruleMorning, function(){
   var d = new Date();
   var dayid = d.getDate() + '' + d.getMonth() + '' + d.getFullYear();
-  sendEveningMail(dayid)
+  generateOrders(dayid)
 });
 
-function sendEveningMail(id) {
+function generateOrders(id) {
   Orders.find({'dayid': id}, (err, orders) => {
     if(err) {return res.status(400).send({error: err.message});}
     var total = {
@@ -185,7 +185,7 @@ function sendLetter(text) {
 
   var mailOptions = {
     from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
-    to: 'Eynsteyn@hotmail.com',
+    to: 'eynsteyn@hotmail.com, kokyhin@gmail.com',
     subject: 'Заказы',
     text: text,
   };
