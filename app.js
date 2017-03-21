@@ -134,7 +134,7 @@ var sendEvening = schedule.scheduleJob(ruleEvening, function(){
 var ruleMorning = new schedule.RecurrenceRule();
 ruleMorning.dayOfWeek = [0, new schedule.Range(1, 5)];
 ruleMorning.hour = 8;
-ruleMorning.minute = 01;
+ruleMorning.minute = 10;
 
 var sendMorning = schedule.scheduleJob(ruleMorning, function(){
   var d = new Date();
@@ -185,7 +185,7 @@ function sendLetter(text) {
 
   var mailOptions = {
     from: '"FusionWorks Meal 🍔" <meal@fusionworks.md>',
-    to: 'eynsteyn@hotmail.com, kokyhin@gmail.com',
+    to: 'srusev@fusionworks.md',
     subject: 'Заказы',
     text: text,
   };
