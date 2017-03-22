@@ -10,7 +10,7 @@ ensureAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()) {
     next()
   } else {
-    res.status(401).send({error: err.message});
+    res.status(401).send({error: 'Fail'});
   }
 };
 
