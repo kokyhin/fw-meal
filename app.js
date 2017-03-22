@@ -133,7 +133,7 @@ var sendEvening = schedule.scheduleJob(ruleEvening, function(){
 
 var ruleMorning = new schedule.RecurrenceRule();
 ruleMorning.dayOfWeek = [0, new schedule.Range(1, 5)];
-ruleMorning.hour = 9;
+ruleMorning.hour = 11;
 ruleMorning.minute = 0;
 
 var sendMorning = schedule.scheduleJob(ruleMorning, function(){
