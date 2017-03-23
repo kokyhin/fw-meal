@@ -165,10 +165,9 @@ function generateOrders(id) {
       total.first = total.first + order.first;
     });
     var plainText = `
-       Полных - ${total.full}
-       Первое - ${total.first}
-       Второе - ${total.second}
-       Итого - ${total.total}
+       ${total.full} Полных
+       ${total.first} Первых
+       ${total.second} Вторых
     `
     sendLetter(plainText)
   });
