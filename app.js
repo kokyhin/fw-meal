@@ -164,11 +164,17 @@ function generateOrders(id) {
       total.second = total.second + order.second;
       total.first = total.first + order.first;
     });
-    var plainText = `
-       ${total.full} Полных
-       ${total.first} Первых
-       ${total.second} Вторых
-    `
+    var plainText = '';
+
+    if (total.full > 0) {
+      plainText += total.full + ' полных \n';
+    }
+    if (total.first > 0) {
+      plainText += total.first + ' первых \n';
+    }
+    if (total.second > 0) {
+      plainText += total.second + ' вторых \n';
+    }
     sendLetter(plainText)
   });
 }
