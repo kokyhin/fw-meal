@@ -75,7 +75,7 @@
         <iron-pages selected="{{activeTab}}">
           <div>
             <form is="iron-form" id="loginForm">
-              <paper-input name="username" label="Username" required error-message="Required field"></paper-input>
+              <paper-input autocomplete name="username" label="Username" required error-message="Required field"></paper-input>
               <min-length-validator id="min-length-validator" min-length="4"></min-length-validator>
               <paper-password-input auto-validate label="Password" id='loginPassword' validator="min-length-validator" error-message="Enter at least 4 characters"></paper-password-input>
               <paper-button on-click='_submitLoginForm' raised>Submit</paper-button>
