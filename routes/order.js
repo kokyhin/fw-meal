@@ -104,6 +104,7 @@ router.get('/get-week', ensureAuthenticated, function(req, res) {
               day.second = user.orders[i].second;
               day.first = user.orders[i].first;
               day.full = user.orders[i].full;
+              day.custom = user.orders[i].custom;
               day.disabled = isDisabled;
             }
           }
